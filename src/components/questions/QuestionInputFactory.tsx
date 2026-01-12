@@ -1,6 +1,6 @@
 import {type Control, Controller} from "react-hook-form";
 import {
-    Alert, Box,
+    Alert,
     Card,
     CardContent,
     Checkbox,

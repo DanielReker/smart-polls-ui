@@ -12,7 +12,7 @@ import {
 } from "../api/generated/poll-controller/poll-controller.ts";
 import type {PollQuestionsUpsertRequest} from "../api/model";
 import {QuestionCard} from "../components/questions/QuestionCard.tsx";
-import {PlayCircle, PlayCircleFilled, StopCircle} from "@mui/icons-material";
+import {PlayCircle, StopCircle} from "@mui/icons-material";
 import {useQueryClient} from "@tanstack/react-query";
 import PollStatus from "../components/PollStatus.tsx";
 
