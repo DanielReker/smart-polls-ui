@@ -1,42 +1,78 @@
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import {useFieldArray, useForm} from 'react-hook-form';
-import {Box, Button, CircularProgress, Divider, Typography} from '@mui/material';
+import {
+    Box,
+    Button,
+    Card,
+    CardContent,
+    CircularProgress,
+    Divider,
+    InputAdornment,
+    TextField,
+    Typography
+} from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
+import PlayCircle from "@mui/icons-material/PlayCircle";
+import StopCircle from "@mui/icons-material/StopCircle";
 import {useParams} from "react-router";
+import {useQueryClient} from "@tanstack/react-query";
+
 import {
     getGetPollQueryKey,
+    useAiGenerateQuestions,
     useFinishPoll,
     useGetPoll,
     useStartPoll,
     useUpsertQuestions
 } from "../api/generated/poll-controller/poll-controller.ts";
-import type {PollQuestionsUpsertRequest} from "../api/model";
+import type {PollQuestionsUpsertRequest, PollResponse} from "../api/model";
 import {QuestionCard} from "../components/questions/QuestionCard.tsx";
-import {PlayCircle, StopCircle} from "@mui/icons-material";
-import {useQueryClient} from "@tanstack/react-query";
 import PollStatus from "../components/PollStatus.tsx";
 
+const prepareQuestionsForSave = (formData: PollQuestionsUpsertRequest) => {
+    return formData.questions.map((q: any, index) => ({
+        ...q,
+        id: null,
+        position: index,
+        possibleChoices: q.possibleChoices?.map((c: any, cIndex: number) => ({
+            ...c,
+            id: null,
+            position: cIndex
+        }))
+    }));
+};
+
+const prepareQuestionsForForm = (questions: any[]) => {
+    const sortedQuestions = [...questions].sort((a, b) => a.position - b.position);
+    return sortedQuestions.map(q => {
+        if ('possibleChoices' in q && q.possibleChoices) {
+            return {
+                ...q,
+                possibleChoices: [...q.possibleChoices].sort((a, b) => a.position - b.position)
+            };
+        }
+        return q;
+    });
+};
 
 export const EditPollPage = () => {
     const { pollId } = useParams();
     const id = Number(pollId);
-
     const queryClient = useQueryClient();
+
+    const [aiPrompt, setAiPrompt] = useState('');
 
     const { data: poll, isLoading: isPollLoading } = useGetPoll(id);
     const { mutateAsync: saveQuestions, isPending: isSaving } = useUpsertQuestions();
+    const { mutateAsync: generateAiQuestions, isPending: isGenerating } = useAiGenerateQuestions();
 
     const pollStatusChangeMutationOptions = {
         mutation: {
             onSuccess: (updatedPollData: any) => {
-                queryClient.setQueryData(
-                    getGetPollQueryKey(id),
-                    updatedPollData
-                );
+                queryClient.setQueryData(getGetPollQueryKey(id), updatedPollData);
             },
-            onError: () => {
-                alert("Failed to start poll");
-            }
+            onError: () => alert("Failed to change poll status")
         }
     };
 
@@ -54,35 +90,12 @@ export const EditPollPage = () => {
 
     useEffect(() => {
         if (poll?.questions) {
-            const sortedQuestions = [...poll.questions].sort((a, b) => a.position - b.position);
-
-            const preparedQuestions = sortedQuestions.map(q => {
-                if ('possibleChoices' in q && q.possibleChoices) {
-                    return {
-                        ...q,
-                        possibleChoices: [...q.possibleChoices].sort((a, b) => a.position - b.position)
-                    };
-                }
-                return q;
-            });
-
-            reset({ questions: preparedQuestions });
+            reset({ questions: prepareQuestionsForForm(poll.questions) });
         }
     }, [poll, reset]);
 
-    const onSubmit = async (data: PollQuestionsUpsertRequest) => {
-        const questionsToSend = data.questions.map((q: any, index) => ({
-            ...q,
-            id: null,
-            position: index,
-
-            possibleChoices: q.possibleChoices?.map((c: any, cIndex: number) => ({
-                ...c,
-                id: null,
-                position: cIndex
-            }))
-        }));
-
+    const onManualSave = async (data: PollQuestionsUpsertRequest) => {
+        const questionsToSend = prepareQuestionsForSave(data);
         try {
             await saveQuestions({ pollId: id, data: { questions: questionsToSend } });
             // TODO: Add notification
@@ -93,114 +106,193 @@ export const EditPollPage = () => {
         }
     };
 
+    const onAiGenerate = async (data: PollQuestionsUpsertRequest) => {
+        if (!aiPrompt.trim()) return;
+
+        const questionsToSend = prepareQuestionsForSave(data);
+
+        try {
+            await saveQuestions({ pollId: id, data: { questions: questionsToSend } });
+
+            const updatedPoll: PollResponse = await generateAiQuestions({
+                pollId: id,
+                data: { prompt: aiPrompt }
+            });
+
+            if (updatedPoll.questions) {
+                reset({ questions: prepareQuestionsForForm(updatedPoll.questions) });
+                setAiPrompt('');
+            }
+        } catch (e) {
+            console.error(e);
+            alert('Failed to generate questions. Please try again.');
+        }
+    };
+
     if (isPollLoading) {
         return <Box display="flex" justifyContent="center" mt={4}><CircularProgress /></Box>;
     }
 
+    const isGlobalLoading = isSaving || isGenerating;
+
     return (
         <Box maxWidth="md" mx="auto" pb={10}>
-            <Box display="flex" gap={2} alignItems="center">
-                <Typography variant="h4" gutterBottom>{poll?.name}</Typography>
-                <PollStatus status={poll?.status}/>
+            <Box display="flex" gap={2} alignItems="center" mb={3}>
+                <Typography variant="h4" sx={{ flexGrow: 1 }}>{poll?.name}</Typography>
+                <PollStatus status={poll?.status} />
+
                 {poll?.status === 'DRAFT' &&
                     <Button
-                        sx={{ml: 3}}
                         variant='outlined'
-                        endIcon={<PlayCircle/>}
+                        endIcon={<PlayCircle />}
                         disabled={isStarting}
-                        onClick={() => startPoll({pollId: id})}
-                    >{isStarting ? 'Starting...' : 'Start'}</Button>
+                        onClick={() => startPoll({ pollId: id })}
+                    >
+                        {isStarting ? 'Starting...' : 'Start Poll'}
+                    </Button>
                 }
                 {poll?.status === 'ACTIVE' &&
                     <Button
-                        sx={{ml: 3}}
                         variant='outlined'
-                        endIcon={<StopCircle/>}
+                        color="warning"
+                        endIcon={<StopCircle />}
                         disabled={isFinishing}
-                        onClick={() => finishPoll({pollId: id})}
-                    >{isFinishing ? 'Finishing...' : 'Finish'}</Button>
+                        onClick={() => finishPoll({ pollId: id })}
+                    >
+                        {isFinishing ? 'Finishing...' : 'Finish Poll'}
+                    </Button>
                 }
             </Box>
 
-            {poll?.status === 'DRAFT' && (<><Divider sx={{ mb: 3, mt: 2 }} />
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    {fields.map((field, index) => (
-                        <QuestionCard
-                            key={field.id}
-                            index={index}
-                            field={field}
-                            control={control}
-                            remove={remove}
-                            move={move}
-                            isFirst={index === 0}
-                            isLast={index === fields.length - 1}
-                        />
-                    ))}
+            {poll?.status === 'DRAFT' && (
+                <>
+                    <Card sx={{
+                        mb: 4,
+                        border: '1px dashed',
+                        borderColor: 'primary.main',
+                        bgcolor: 'action.hover'
+                    }}>
+                        <CardContent>
+                            <Box display="flex" alignItems="center" gap={1} mb={2}>
+                                <AutoAwesomeIcon color="primary" />
+                                <Typography variant="h6" color="primary">AI Assistant</Typography>
+                            </Box>
+                            <Typography variant="body2" color="text.secondary" sx={{mb: 2}}>
+                                Enter a topic or instructions (e.g., "Add 3 questions about Java Streams"),
+                                and the AI will update your poll. This will automatically save your current questions.
+                            </Typography>
 
-                    <Box sx={{ display: 'flex', gap: 2, mt: 3, mb: 5, flexWrap: 'wrap' }}>
-                        <Button
-                            variant="outlined"
-                            startIcon={<AddCircleOutlineIcon />}
-                            onClick={() => append({
-                                dtype: 'text',
-                                name: '',
-                                isRequired: true,
-                                position: 0,
-                                maxLength: 1000,
-                                needAiSummary: true
-                            } as any)}
-                        >
-                            Text
-                        </Button>
+                            <Box display="flex" gap={2}>
+                                <TextField
+                                    fullWidth
+                                    size="small"
+                                    placeholder="Enter your prompt here..."
+                                    value={aiPrompt}
+                                    onChange={(e) => setAiPrompt(e.target.value)}
+                                    disabled={isGlobalLoading}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter') {
+                                            e.preventDefault();
+                                            handleSubmit(onAiGenerate)();
+                                        }
+                                    }}
+                                    slotProps={{
+                                        input: {
+                                            startAdornment: (
+                                                <InputAdornment position="start">
+                                                    <AutoAwesomeIcon fontSize="small" color="disabled"/>
+                                                </InputAdornment>
+                                            ),
+                                        }
+                                    }}
+                                />
+                                <Button
+                                    variant="contained"
+                                    onClick={handleSubmit(onAiGenerate)}
+                                    disabled={isGlobalLoading || !aiPrompt.trim()}
+                                    sx={{ minWidth: 120 }}
+                                >
+                                    {isGenerating ? <CircularProgress size={24} color="inherit"/> : 'Generate'}
+                                </Button>
+                            </Box>
+                        </CardContent>
+                    </Card>
 
-                        <Button
-                            variant="outlined"
-                            startIcon={<AddCircleOutlineIcon />}
-                            onClick={() => append({
-                                dtype: 'single-choice',
-                                name: '',
-                                isRequired: true,
-                                position: 0,
-                                possibleChoices: []
-                            } as any)}
-                        >
-                            Single Choice
-                        </Button>
+                    <Divider sx={{ mb: 3 }} />
 
-                        <Button
-                            variant="outlined"
-                            startIcon={<AddCircleOutlineIcon />}
-                            onClick={() => append({
-                                dtype: 'multi-choice',
-                                name: '',
-                                isRequired: true,
-                                position: 0,
-                                possibleChoices: []
-                            } as any)}
-                        >
-                            Multi Choice
-                        </Button>
-                    </Box>
+                    <form onSubmit={handleSubmit(onManualSave)}>
+                        {fields.map((field, index) => (
+                            <QuestionCard
+                                key={field.id}
+                                index={index}
+                                field={field}
+                                control={control}
+                                remove={remove}
+                                move={move}
+                                isFirst={index === 0}
+                                isLast={index === fields.length - 1}
+                            />
+                        ))}
 
-                    <Box
-                        sx={{
-                            position: 'fixed', bottom: 0, left: 0, right: 0,
-                            p: 2, bgcolor: 'background.paper', borderTop: '1px solid #ddd',
-                            display: 'flex', justifyContent: 'center', zIndex: 1000,
-                            boxShadow: '0px -2px 10px rgba(0,0,0,0.1)'
-                        }}
-                    >
-                        <Button
-                            type="submit"
-                            variant="contained"
-                            size="large"
-                            disabled={isSaving}
-                            sx={{ width: 300 }}
+                        <Box sx={{ display: 'flex', gap: 2, mt: 3, mb: 10, flexWrap: 'wrap' }}>
+                            <Button
+                                variant="outlined"
+                                startIcon={<AddCircleOutlineIcon />}
+                                disabled={isGlobalLoading}
+                                onClick={() => append({
+                                    dtype: 'text', name: '', isRequired: true, position: 0,
+                                    maxLength: 1000, needAiSummary: true
+                                } as any)}
+                            >
+                                Text
+                            </Button>
+
+                            <Button
+                                variant="outlined"
+                                startIcon={<AddCircleOutlineIcon />}
+                                disabled={isGlobalLoading}
+                                onClick={() => append({
+                                    dtype: 'single-choice', name: '', isRequired: true, position: 0,
+                                    possibleChoices: []
+                                } as any)}
+                            >
+                                Single Choice
+                            </Button>
+
+                            <Button
+                                variant="outlined"
+                                startIcon={<AddCircleOutlineIcon />}
+                                disabled={isGlobalLoading}
+                                onClick={() => append({
+                                    dtype: 'multi-choice', name: '', isRequired: true, position: 0,
+                                    possibleChoices: []
+                                } as any)}
+                            >
+                                Multi Choice
+                            </Button>
+                        </Box>
+
+                        <Box
+                            sx={{
+                                position: 'fixed', bottom: 0, left: 0, right: 0,
+                                p: 2, bgcolor: 'background.paper', borderTop: '1px solid #ddd',
+                                display: 'flex', justifyContent: 'center', zIndex: 1000,
+                                boxShadow: '0px -2px 10px rgba(0,0,0,0.1)'
+                            }}
                         >
-                            {isSaving ? 'Saving...' : 'Save changes'}
-                        </Button>
-                    </Box>
-                </form></>)}
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                size="large"
+                                disabled={isGlobalLoading}
+                                sx={{ width: 300 }}
+                            >
+                                {isSaving ? 'Saving...' : 'Save Changes'}
+                            </Button>
+                        </Box>
+                    </form>
+                </>
+            )}
         </Box>
     );
 };
