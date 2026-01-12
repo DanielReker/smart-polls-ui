@@ -28,7 +28,7 @@ export const EditPollPage = () => {
 
     const pollStatusChangeMutationOptions = {
         mutation: {
-            onSuccess: (updatedPollData) => {
+            onSuccess: (updatedPollData: any) => {
                 queryClient.setQueryData(
                     getGetPollQueryKey(id),
                     updatedPollData
@@ -85,7 +85,8 @@ export const EditPollPage = () => {
 
         try {
             await saveQuestions({ pollId: id, data: { questions: questionsToSend } });
-            alert('Questions saved successfully!');
+            // TODO: Add notification
+            // alert('Questions saved successfully!');
         } catch (e) {
             console.error(e);
             alert('Error while saving questions');
@@ -121,7 +122,7 @@ export const EditPollPage = () => {
                 }
             </Box>
 
-            {poll?.status == 'DRAFT' && (<><Divider sx={{ mb: 3, mt: 2 }} />
+            {poll?.status === 'DRAFT' && (<><Divider sx={{ mb: 3, mt: 2 }} />
                 <form onSubmit={handleSubmit(onSubmit)}>
                     {fields.map((field, index) => (
                         <QuestionCard

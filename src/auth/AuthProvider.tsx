@@ -4,6 +4,7 @@ import {
     useCreateUser,
     useGetUserMe,
     useLogin,
+    useLogout,
     useUpdateCredentials
 } from "../api/generated/user-controller/user-controller.ts";
 import {AuthContext} from "./AuthContext.tsx";
@@ -13,6 +14,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [token, setToken] = useState<string | null>(localStorage.getItem('poll_token'));
 
     const queryClient = useQueryClient();
+
+    const { mutateAsync: logoutCurrentSession } = useLogout();
 
     const { mutateAsync: createUser, isPending } = useCreateUser();
 
@@ -40,19 +43,29 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         initSession();
     }, [token, createUser]);
 
-    const logout = () => {
+    const logout = async () => {
+        await logoutCurrentSession();
         localStorage.removeItem('poll_token');
         setToken(null);
+        await queryClient.invalidateQueries({ queryKey: getGetUserMeQueryKey() });
     };
 
-    const login = (login: string, password: string) => {
-        loginRaw({userLogin: login, data: {password}})
-            .then(response => setToken(response.token))
+    const login = async (login: string, password: string) => {
+        try {
+            const response = await loginRaw({ userLogin: login, data: { password } });
+            const newToken = response.token;
+            localStorage.setItem('poll_token', newToken);
+            setToken(newToken);
+            await queryClient.invalidateQueries({ queryKey: getGetUserMeQueryKey() });
+        } catch (e) {
+            console.error(e);
+            throw e;
+        }
     };
 
-    const register = (login: string, password: string) => {
-        updateCredentials({data: {newPassword: password, newLogin: login}})
-            .then(() => queryClient.invalidateQueries({queryKey: getGetUserMeQueryKey()}))
+    const register = async (login: string, password: string) => {
+        await updateCredentials({data: {newPassword: password, newLogin: login}})
+        await queryClient.invalidateQueries({queryKey: getGetUserMeQueryKey()})
      }
 
     if (!token && isPending) {
@@ -66,7 +79,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             logout,
             login,
             register,
-            userMe: userMe ? userMe : null,
+            isAdmin: userMe?.roles?.includes('ADMIN') || false,
+            isRegistered: userMe?.isRegistered || false,
+            userLogin: userMe?.login || null
         }}>
             {children}
         </AuthContext>

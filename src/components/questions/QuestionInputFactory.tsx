@@ -1,6 +1,5 @@
 import {type Control, Controller} from "react-hook-form";
 import {
-    Alert,
     Card,
     CardContent,
     Checkbox,
@@ -12,11 +11,10 @@ import {
     TextField,
     Typography
 } from "@mui/material";
-import type {FormValues} from "../../pages/TakePollPage.tsx";
 
 interface InputFactoryProps {
     question: any;
-    control: Control<FormValues>;
+    control: Control<any>;
 }
 
 export const QuestionInputFactory = ({question, control}: InputFactoryProps) => {
@@ -26,10 +24,14 @@ export const QuestionInputFactory = ({question, control}: InputFactoryProps) => 
         required: isRequired ? 'This field is required' : false
     };
 
-    const renderContent = () => {
-        switch (dtype) {
-            case 'text':
-                return (
+    return (
+        <Card sx={{mb: 3}}>
+            <CardContent>
+                <Typography variant="h6" gutterBottom>
+                    {name} {isRequired && <span style={{color: 'red'}}>*</span>}
+                </Typography>
+
+                {dtype === 'text' && (
                     <Controller
                         name={String(id)}
                         control={control}
@@ -52,10 +54,9 @@ export const QuestionInputFactory = ({question, control}: InputFactoryProps) => 
                             />
                         )}
                     />
-                );
+                )}
 
-            case 'single-choice':
-                return (
+                {dtype === 'single-choice' && (
                     <Controller
                         name={String(id)}
                         control={control}
@@ -78,10 +79,9 @@ export const QuestionInputFactory = ({question, control}: InputFactoryProps) => 
                             </>
                         )}
                     />
-                );
+                )}
 
-            case 'multi-choice':
-                return (
+                {dtype === 'multi-choice' && (
                     <Controller
                         name={String(id)}
                         control={control}
@@ -126,20 +126,7 @@ export const QuestionInputFactory = ({question, control}: InputFactoryProps) => 
                             );
                         }}
                     />
-                );
-
-            default:
-                return <Alert severity="error">Unknown question type: {dtype}</Alert>;
-        }
-    };
-
-    return (
-        <Card sx={{mb: 3}}>
-            <CardContent>
-                <Typography variant="h6" gutterBottom>
-                    {name} {isRequired && <span style={{color: 'red'}}>*</span>}
-                </Typography>
-                {renderContent()}
+                )}
             </CardContent>
         </Card>
     );

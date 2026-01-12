@@ -1,13 +1,14 @@
 import {createContext, useContext} from "react";
-import type {UserResponse} from "../api/model";
 
 export interface AuthContextType {
     isAuthenticated: boolean;
+    isRegistered: boolean;
+    isAdmin: boolean;
     token: string | null;
+    userLogin: string | null;
     logout: () => void;
-    register: (login: string, password: string) => void;
-    login: (login: string, password: string) => void;
-    userMe: UserResponse | null;
+    register: (login: string, password: string) => Promise<void>;
+    login: (login: string, password: string) => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null);

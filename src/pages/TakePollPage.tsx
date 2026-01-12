@@ -7,6 +7,7 @@ import {Link, useParams} from "react-router";
 import {useCreateSubmission, useGetPoll} from "../api/generated/poll-controller/poll-controller.ts";
 import type {SubmissionCreateRequest} from "../api/model";
 import {QuestionInputFactory} from "../components/questions/QuestionInputFactory.tsx";
+import {useAuth} from "../auth/AuthContext.tsx";
 
 
 export type FormValues = {
@@ -17,6 +18,8 @@ export const TakePollPage = () => {
     const { pollId } = useParams();
     const id = Number(pollId);
     const [isSuccess, setIsSuccess] = useState(false);
+
+    const { isAdmin } = useAuth();
 
     const { data: poll, isLoading, error } = useGetPoll(id);
     const { mutateAsync: submitPoll, isPending: isSubmitting } = useCreateSubmission();
@@ -71,15 +74,15 @@ export const TakePollPage = () => {
 
     if (isLoading) return <Box display="flex" justifyContent="center" mt={4}><CircularProgress /></Box>;
     if (error || !poll) return <Container sx={{ mt: 4 }}><Alert severity="error">Poll not found</Alert></Container>;
-    if (poll.status == 'DRAFT') return <Container sx={{ mt: 4 }}><Alert severity="error">Poll is not started yet</Alert></Container>;
-    if (poll.status == 'FINISHED') return <Container sx={{ mt: 4 }}><Alert severity="error">Poll is already finished</Alert></Container>;
+    if (poll.status === 'DRAFT') return <Container sx={{ mt: 4 }}><Alert severity="error">Poll is not started yet</Alert></Container>;
+    if (poll.status === 'FINISHED') return <Container sx={{ mt: 4 }}><Alert severity="error">Poll is already finished</Alert></Container>;
 
-    if (isSuccess || poll.mySubmissionsCount > 0) {
+    if ((isSuccess || poll.mySubmissionsCount > 0) && !isAdmin) {
         return (
             <Container maxWidth="sm" sx={{ mt: 10, textAlign: 'center' }}>
                 <CheckCircleOutlineIcon color="success" sx={{ fontSize: 80, mb: 2 }} />
                 <Typography variant="h4" gutterBottom>Thank you!</Typography>
-                <Typography variant="body1" color="text.secondary" paragraph>
+                <Typography variant="body1" color="text.secondary">
                     Successfully submitted your answers
                 </Typography>
                 <Button component={Link} to="/" variant="contained" sx={{ mt: 2 }}>
