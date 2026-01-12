@@ -9,6 +9,7 @@ import {EditPollPage} from "./pages/EditPollPage.tsx";
 import {TakePollPage} from "./pages/TakePollPage.tsx";
 import {CssBaseline} from "@mui/material";
 import {AuthPage} from "./pages/AuthPage.tsx";
+import {StatsPage} from "./pages/StatsPage.tsx";
 
 const queryClient = new QueryClient();
 
@@ -22,7 +23,7 @@ const router = createBrowserRouter([
             { path: 'create', element: <CreatePollPage /> },
             { path: 'polls/:pollId/edit', element: <EditPollPage /> },
             { path: 'polls/:pollId', element: <TakePollPage /> },
-            // { path: 'polls/:pollId/stats', element: <StatsPage /> },
+            { path: 'polls/:pollId/stats', element: <StatsPage /> },
         ],
     },
 ]);

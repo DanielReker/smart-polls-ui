@@ -119,7 +119,7 @@ export const QuestionCard = ({index, field, control, remove, move, isFirst, isLa
                                 render={({field}) => (
                                     <FormControlLabel
                                         control={<Switch {...field} checked={field.value} color="secondary"/>}
-                                        label="AI Summary (Tags)"
+                                        label="AI Summary"
                                     />
                                 )}
                             />

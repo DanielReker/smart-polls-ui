@@ -4,8 +4,9 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { StatsResponseStatsItem } from './statsResponseStatsItem';
+import type {StatsResponseStatsItem} from './statsResponseStatsItem';
 
 export interface StatsResponse {
+  submissionsCount: number;
   stats: StatsResponseStatsItem[];
 }

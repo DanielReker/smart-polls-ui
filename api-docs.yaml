@@ -25,14 +25,14 @@ paths:
               $ref: "#/components/schemas/PollQuestionsUpsertRequest"
         required: true
       responses:
-        "409":
-          description: Conflict
+        "401":
+          description: Unauthorized
           content:
             '*/*':
               schema:
                 $ref: "#/components/schemas/ErrorDto"
-        "401":
-          description: Unauthorized
+        "409":
+          description: Conflict
           content:
             '*/*':
               schema:
@@ -57,14 +57,14 @@ paths:
       - user-controller
       operationId: createUser
       responses:
-        "409":
-          description: Conflict
+        "401":
+          description: Unauthorized
           content:
             '*/*':
               schema:
                 $ref: "#/components/schemas/ErrorDto"
-        "401":
-          description: Unauthorized
+        "409":
+          description: Conflict
           content:
             '*/*':
               schema:
@@ -99,14 +99,14 @@ paths:
               $ref: "#/components/schemas/LoginRequest"
         required: true
       responses:
-        "409":
-          description: Conflict
+        "401":
+          description: Unauthorized
           content:
             '*/*':
               schema:
                 $ref: "#/components/schemas/ErrorDto"
-        "401":
-          description: Unauthorized
+        "409":
+          description: Conflict
           content:
             '*/*':
               schema:
@@ -135,14 +135,14 @@ paths:
               $ref: "#/components/schemas/PollCreateRequest"
         required: true
       responses:
-        "409":
-          description: Conflict
+        "401":
+          description: Unauthorized
           content:
             '*/*':
               schema:
                 $ref: "#/components/schemas/ErrorDto"
-        "401":
-          description: Unauthorized
+        "409":
+          description: Conflict
           content:
             '*/*':
               schema:
@@ -180,14 +180,14 @@ paths:
               $ref: "#/components/schemas/SubmissionCreateRequest"
         required: true
       responses:
-        "409":
-          description: Conflict
+        "401":
+          description: Unauthorized
           content:
             '*/*':
               schema:
                 $ref: "#/components/schemas/ErrorDto"
-        "401":
-          description: Unauthorized
+        "409":
+          description: Conflict
           content:
             '*/*':
               schema:
@@ -219,14 +219,14 @@ paths:
           type: integer
           format: int64
       responses:
-        "409":
-          description: Conflict
+        "401":
+          description: Unauthorized
           content:
             '*/*':
               schema:
                 $ref: "#/components/schemas/ErrorDto"
-        "401":
-          description: Unauthorized
+        "409":
+          description: Conflict
           content:
             '*/*':
               schema:
@@ -258,14 +258,14 @@ paths:
           type: integer
           format: int64
       responses:
-        "409":
-          description: Conflict
+        "401":
+          description: Unauthorized
           content:
             '*/*':
               schema:
                 $ref: "#/components/schemas/ErrorDto"
-        "401":
-          description: Unauthorized
+        "409":
+          description: Conflict
           content:
             '*/*':
               schema:
@@ -303,14 +303,14 @@ paths:
               $ref: "#/components/schemas/AiGenerateQuestionsRequest"
         required: true
       responses:
-        "409":
-          description: Conflict
+        "401":
+          description: Unauthorized
           content:
             '*/*':
               schema:
                 $ref: "#/components/schemas/ErrorDto"
-        "401":
-          description: Unauthorized
+        "409":
+          description: Conflict
           content:
             '*/*':
               schema:
@@ -348,14 +348,14 @@ paths:
           type: integer
           format: int64
       responses:
-        "409":
-          description: Conflict
+        "401":
+          description: Unauthorized
           content:
             '*/*':
               schema:
                 $ref: "#/components/schemas/ErrorDto"
-        "401":
-          description: Unauthorized
+        "409":
+          description: Conflict
           content:
             '*/*':
               schema:
@@ -382,14 +382,14 @@ paths:
               $ref: "#/components/schemas/ChangeCredentialsRequest"
         required: true
       responses:
-        "409":
-          description: Conflict
+        "401":
+          description: Unauthorized
           content:
             '*/*':
               schema:
                 $ref: "#/components/schemas/ErrorDto"
-        "401":
-          description: Unauthorized
+        "409":
+          description: Conflict
           content:
             '*/*':
               schema:
@@ -410,14 +410,14 @@ paths:
       - user-controller
       operationId: getUserMe
       responses:
-        "409":
-          description: Conflict
+        "401":
+          description: Unauthorized
           content:
             '*/*':
               schema:
                 $ref: "#/components/schemas/ErrorDto"
-        "401":
-          description: Unauthorized
+        "409":
+          description: Conflict
           content:
             '*/*':
               schema:
@@ -449,14 +449,14 @@ paths:
           type: integer
           format: int64
       responses:
-        "409":
-          description: Conflict
+        "401":
+          description: Unauthorized
           content:
             '*/*':
               schema:
                 $ref: "#/components/schemas/ErrorDto"
-        "401":
-          description: Unauthorized
+        "409":
+          description: Conflict
           content:
             '*/*':
               schema:
@@ -488,14 +488,14 @@ paths:
           type: integer
           format: int64
       responses:
-        "409":
-          description: Conflict
+        "401":
+          description: Unauthorized
           content:
             '*/*':
               schema:
                 $ref: "#/components/schemas/ErrorDto"
-        "401":
-          description: Unauthorized
+        "409":
+          description: Conflict
           content:
             '*/*':
               schema:
@@ -520,14 +520,14 @@ paths:
       - poll-controller
       operationId: getMyPolls
       responses:
-        "409":
-          description: Conflict
+        "401":
+          description: Unauthorized
           content:
             '*/*':
               schema:
                 $ref: "#/components/schemas/ErrorDto"
-        "401":
-          description: Unauthorized
+        "409":
+          description: Conflict
           content:
             '*/*':
               schema:
@@ -552,14 +552,14 @@ paths:
       - user-controller
       operationId: logoutEverywhere
       responses:
-        "409":
-          description: Conflict
+        "401":
+          description: Unauthorized
           content:
             '*/*':
               schema:
                 $ref: "#/components/schemas/ErrorDto"
-        "401":
-          description: Unauthorized
+        "409":
+          description: Conflict
           content:
             '*/*':
               schema:
@@ -580,14 +580,14 @@ paths:
       - user-controller
       operationId: logout
       responses:
-        "409":
-          description: Conflict
+        "401":
+          description: Unauthorized
           content:
             '*/*':
               schema:
                 $ref: "#/components/schemas/ErrorDto"
-        "401":
-          description: Unauthorized
+        "409":
+          description: Conflict
           content:
             '*/*':
               schema:
@@ -960,6 +960,9 @@ components:
     StatsResponse:
       type: object
       properties:
+        submissionsCount:
+          type: integer
+          format: int64
         stats:
           type: array
           items:
@@ -969,6 +972,7 @@ components:
             - $ref: "#/components/schemas/TextQuestionStatsDto"
       required:
       - stats
+      - submissionsCount
     TextQuestionStatsDto:
       allOf:
       - $ref: "#/components/schemas/QuestionStatsDto"
