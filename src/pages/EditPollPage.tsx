@@ -15,7 +15,7 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import PlayCircle from "@mui/icons-material/PlayCircle";
 import StopCircle from "@mui/icons-material/StopCircle";
-import {useParams} from "react-router";
+import {useNavigate, useParams} from "react-router";
 import {useQueryClient} from "@tanstack/react-query";
 
 import {
@@ -29,6 +29,7 @@ import {
 import type {PollQuestionsUpsertRequest, PollResponse} from "../api/model";
 import {QuestionCard} from "../components/questions/QuestionCard.tsx";
 import PollStatus from "../components/PollStatus.tsx";
+import {PollNavigation} from "../components/PollNavigation.tsx";
 
 const prepareQuestionsForSave = (formData: PollQuestionsUpsertRequest) => {
     return formData.questions.map((q: any, index) => ({
@@ -60,6 +61,7 @@ export const EditPollPage = () => {
     const { pollId } = useParams();
     const id = Number(pollId);
     const queryClient = useQueryClient();
+    const navigate = useNavigate();
 
     const [aiPrompt, setAiPrompt] = useState('');
 
@@ -67,17 +69,23 @@ export const EditPollPage = () => {
     const { mutateAsync: saveQuestions, isPending: isSaving } = useUpsertQuestions();
     const { mutateAsync: generateAiQuestions, isPending: isGenerating } = useAiGenerateQuestions();
 
-    const pollStatusChangeMutationOptions = {
+    const { mutateAsync: startPoll, isPending: isStarting } = useStartPoll({
         mutation: {
-            onSuccess: (updatedPollData: any) => {
+            onSuccess: (updatedPollData) => {
                 queryClient.setQueryData(getGetPollQueryKey(id), updatedPollData);
+                navigate(`/polls/${id}/stats`);
             },
-            onError: () => alert("Failed to change poll status")
+            onError: () => alert("Failed to start poll")
         }
-    };
+    });
 
-    const { mutateAsync: startPoll, isPending: isStarting } = useStartPoll(pollStatusChangeMutationOptions);
-    const { mutateAsync: finishPoll, isPending: isFinishing } = useFinishPoll(pollStatusChangeMutationOptions);
+    const { mutateAsync: finishPoll, isPending: isFinishing } = useFinishPoll({
+        mutation: {
+            onSuccess: (updatedPollData) => {
+                queryClient.setQueryData(getGetPollQueryKey(id), updatedPollData);
+            }
+        }
+    });
 
     const { control, handleSubmit, reset } = useForm<PollQuestionsUpsertRequest>({
         defaultValues: { questions: [] }
@@ -134,44 +142,44 @@ export const EditPollPage = () => {
     }
 
     const isGlobalLoading = isSaving || isGenerating;
+    const isDraft = poll?.status === 'DRAFT';
 
     return (
         <Box maxWidth="md" mx="auto" pb={10}>
-            <Box display="flex" gap={2} alignItems="center" mb={3}>
-                <Typography variant="h4" sx={{ flexGrow: 1 }}>{poll?.name}</Typography>
-                <PollStatus status={poll?.status} />
+            <Box mb={3}>
+                <Typography variant="h4" gutterBottom>{poll?.name}</Typography>
+                <Box display="flex" alignItems="center" gap={2} mb={2}>
+                    <PollStatus status={poll?.status} />
+                    {isDraft && (
+                        <Button
+                            variant='contained'
+                            color="success"
+                            endIcon={<PlayCircle />}
+                            disabled={isStarting}
+                            onClick={() => startPoll({ pollId: id })}
+                        >
+                            {isStarting ? 'Starting...' : 'Start Poll'}
+                        </Button>
+                    )}
+                    {poll?.status === 'ACTIVE' && (
+                        <Button
+                            variant='contained'
+                            color="warning"
+                            endIcon={<StopCircle />}
+                            disabled={isFinishing}
+                            onClick={() => finishPoll({ pollId: id })}
+                        >
+                            {isFinishing ? 'Finishing...' : 'Finish Poll'}
+                        </Button>
+                    )}
+                </Box>
 
-                {poll?.status === 'DRAFT' &&
-                    <Button
-                        variant='outlined'
-                        endIcon={<PlayCircle />}
-                        disabled={isStarting}
-                        onClick={() => startPoll({ pollId: id })}
-                    >
-                        {isStarting ? 'Starting...' : 'Start Poll'}
-                    </Button>
-                }
-                {poll?.status === 'ACTIVE' &&
-                    <Button
-                        variant='outlined'
-                        color="warning"
-                        endIcon={<StopCircle />}
-                        disabled={isFinishing}
-                        onClick={() => finishPoll({ pollId: id })}
-                    >
-                        {isFinishing ? 'Finishing...' : 'Finish Poll'}
-                    </Button>
-                }
+                <PollNavigation pollId={id} status={poll?.status} />
             </Box>
 
-            {poll?.status === 'DRAFT' && (
+            {isDraft ? (
                 <>
-                    <Card sx={{
-                        mb: 4,
-                        border: '1px dashed',
-                        borderColor: 'primary.main',
-                        bgcolor: 'action.hover'
-                    }}>
+                    <Card sx={{ mb: 4, border: '1px dashed', borderColor: 'primary.main', bgcolor: '#f9faff' }}>
                         <CardContent>
                             <Box display="flex" alignItems="center" gap={1} mb={2}>
                                 <AutoAwesomeIcon color="primary" />
@@ -182,20 +190,16 @@ export const EditPollPage = () => {
                                 and the AI will update your poll. This will automatically save your current questions.
                             </Typography>
 
-                            <Box display="flex" gap={2}>
+                            <Box display="flex" gap={2} alignItems="flex-start">
                                 <TextField
                                     fullWidth
-                                    size="small"
-                                    placeholder="Enter your prompt here..."
+                                    multiline
+                                    minRows={2}
+                                    maxRows={6}
+                                    placeholder="Example: Generate poll for collecting employees feedback on our last corporate party. It should have about 5 questions"
                                     value={aiPrompt}
                                     onChange={(e) => setAiPrompt(e.target.value)}
                                     disabled={isGlobalLoading}
-                                    onKeyDown={(e) => {
-                                        if (e.key === 'Enter') {
-                                            e.preventDefault();
-                                            handleSubmit(onAiGenerate)();
-                                        }
-                                    }}
                                     slotProps={{
                                         input: {
                                             startAdornment: (
@@ -210,7 +214,7 @@ export const EditPollPage = () => {
                                     variant="contained"
                                     onClick={handleSubmit(onAiGenerate)}
                                     disabled={isGlobalLoading || !aiPrompt.trim()}
-                                    sx={{ minWidth: 120 }}
+                                    sx={{ minWidth: 120, mt: 1 }}
                                 >
                                     {isGenerating ? <CircularProgress size={24} color="inherit"/> : 'Generate'}
                                 </Button>
@@ -280,18 +284,25 @@ export const EditPollPage = () => {
                                 boxShadow: '0px -2px 10px rgba(0,0,0,0.1)'
                             }}
                         >
-                            <Button
-                                type="submit"
-                                variant="contained"
-                                size="large"
-                                disabled={isGlobalLoading}
-                                sx={{ width: 300 }}
-                            >
+                            <Button type="submit" variant="contained" size="large" disabled={isSaving} sx={{ width: 300 }}>
                                 {isSaving ? 'Saving...' : 'Save Changes'}
                             </Button>
                         </Box>
                     </form>
                 </>
+            ) : (
+                <Card sx={{ p: 4, textAlign: 'center' }}>
+                    <Typography variant="h6" color="text.secondary">
+                        Poll is active, editing is not allowed
+                    </Typography>
+                    <Button
+                        variant="contained"
+                        sx={{ mt: 2 }}
+                        onClick={() => navigate(`/polls/${id}/stats`)}
+                    >
+                        View Statistics
+                    </Button>
+                </Card>
             )}
         </Box>
     );

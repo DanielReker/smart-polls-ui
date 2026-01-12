@@ -1,9 +1,9 @@
 import {useState} from 'react';
 import {useForm} from 'react-hook-form';
-import {Alert, Box, Button, CircularProgress, Container, Typography} from '@mui/material';
+import {Alert, Box, Button, Card, CircularProgress, Container, Typography} from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import {Link, useParams} from "react-router";
+import {Link, useNavigate, useParams} from "react-router";
 import {useCreateSubmission, useGetPoll} from "../api/generated/poll-controller/poll-controller.ts";
 import type {SubmissionCreateRequest} from "../api/model";
 import {QuestionInputFactory} from "../components/questions/QuestionInputFactory.tsx";
@@ -18,6 +18,8 @@ export const TakePollPage = () => {
     const { pollId } = useParams();
     const id = Number(pollId);
     const [isSuccess, setIsSuccess] = useState(false);
+
+    const navigate = useNavigate();
 
     const { isAdmin } = useAuth();
 
@@ -74,8 +76,34 @@ export const TakePollPage = () => {
 
     if (isLoading) return <Box display="flex" justifyContent="center" mt={4}><CircularProgress /></Box>;
     if (error || !poll) return <Container sx={{ mt: 4 }}><Alert severity="error">Poll not found</Alert></Container>;
-    if (poll.status === 'DRAFT') return <Container sx={{ mt: 4 }}><Alert severity="error">Poll is not started yet</Alert></Container>;
-    if (poll.status === 'FINISHED') return <Container sx={{ mt: 4 }}><Alert severity="error">Poll is already finished</Alert></Container>;
+    if (poll.status === 'DRAFT') return (
+        <Card sx={{ p: 4, textAlign: 'center' }}>
+            <Typography variant="h6" color="text.secondary">
+                Poll is not started yet
+            </Typography>
+            <Button
+                variant="contained"
+                sx={{ mt: 2 }}
+                onClick={() => navigate(`/polls/${id}/edit`)}
+            >
+                Go Edit
+            </Button>
+        </Card>
+    )
+    if (poll.status === 'FINISHED') return (
+        <Card sx={{ p: 4, textAlign: 'center' }}>
+            <Typography variant="h6" color="text.secondary">
+                Poll is already finished
+            </Typography>
+            <Button
+                variant="contained"
+                sx={{ mt: 2 }}
+                onClick={() => navigate(`/polls/${id}/stats`)}
+            >
+                View Statistics
+            </Button>
+        </Card>
+    );
 
     if ((isSuccess || poll.mySubmissionsCount > 0) && !isAdmin) {
         return (
