@@ -26,7 +26,7 @@ import {
     useStartPoll,
     useUpsertQuestions
 } from "../api/generated/poll-controller/poll-controller.ts";
-import type {PollQuestionsUpsertRequest, PollResponse} from "../api/model";
+import {type PollQuestionsUpsertRequest, type PollResponse, PollResponseStatus} from "../api/model";
 import {QuestionCard} from "../components/questions/QuestionCard.tsx";
 import PollStatus from "../components/PollStatus.tsx";
 import {PollNavigation} from "../components/PollNavigation.tsx";
@@ -75,7 +75,7 @@ export const EditPollPage = () => {
                 queryClient.setQueryData(getGetPollQueryKey(id), updatedPollData);
                 navigate(`/polls/${id}/stats`);
             },
-            onError: () => alert("Failed to start poll")
+            onError: () => alert("Не удалось создать опрос")
         }
     });
 
@@ -107,10 +107,10 @@ export const EditPollPage = () => {
         try {
             await saveQuestions({ pollId: id, data: { questions: questionsToSend } });
             // TODO: Add notification
-            // alert('Questions saved successfully!');
+            // alert('Вопросы успешно сохранены!');
         } catch (e) {
             console.error(e);
-            alert('Error while saving questions');
+            alert('Ошибка при сохранении вопросов');
         }
     };
 
@@ -133,7 +133,7 @@ export const EditPollPage = () => {
             }
         } catch (e) {
             console.error(e);
-            alert('Failed to generate questions. Please try again.');
+            alert('Не удалось сгенерировать вопросы. Пожалуйста, попробуйте позже.');
         }
     };
 
@@ -149,7 +149,7 @@ export const EditPollPage = () => {
             <Box mb={3}>
                 <Typography variant="h4" gutterBottom>{poll?.name}</Typography>
                 <Box display="flex" alignItems="center" gap={2} mb={2}>
-                    <PollStatus status={poll?.status} />
+                    <PollStatus status={poll?.status || PollResponseStatus.DRAFT} />
                     {isDraft && (
                         <Button
                             variant='contained'
@@ -158,7 +158,7 @@ export const EditPollPage = () => {
                             disabled={isStarting}
                             onClick={() => startPoll({ pollId: id })}
                         >
-                            {isStarting ? 'Starting...' : 'Start Poll'}
+                            {isStarting ? 'Запуск...' : 'Запустить опрос'}
                         </Button>
                     )}
                     {poll?.status === 'ACTIVE' && (
@@ -169,7 +169,7 @@ export const EditPollPage = () => {
                             disabled={isFinishing}
                             onClick={() => finishPoll({ pollId: id })}
                         >
-                            {isFinishing ? 'Finishing...' : 'Finish Poll'}
+                            {isFinishing ? 'Завершение...' : 'Завершить опрос'}
                         </Button>
                     )}
                 </Box>
@@ -183,11 +183,11 @@ export const EditPollPage = () => {
                         <CardContent>
                             <Box display="flex" alignItems="center" gap={1} mb={2}>
                                 <AutoAwesomeIcon color="primary" />
-                                <Typography variant="h6" color="primary">AI Assistant</Typography>
+                                <Typography variant="h6" color="primary">ИИ-ассистент</Typography>
                             </Box>
                             <Typography variant="body2" color="text.secondary" sx={{mb: 2}}>
-                                Enter a topic or instructions (e.g., "Add 3 questions about Java Streams"),
-                                and the AI will update your poll. This will automatically save your current questions.
+                                Введите тему или инструкции (например, "Добавь 3 вопроса про потоки в Java")
+                                и ИИ обновит ваш опрос. Вопросы будут сохранены автоматически.
                             </Typography>
 
                             <Box display="flex" gap={2} alignItems="flex-start">
@@ -196,7 +196,7 @@ export const EditPollPage = () => {
                                     multiline
                                     minRows={2}
                                     maxRows={6}
-                                    placeholder="Example: Generate poll for collecting employees feedback on our last corporate party. It should have about 5 questions"
+                                    placeholder="Пример: Сгенерируй опрос для сбора фидбека от сотрудников по нашему последнему корпоративу. Он должен содержать около 5 вопросов"
                                     value={aiPrompt}
                                     onChange={(e) => setAiPrompt(e.target.value)}
                                     disabled={isGlobalLoading}
@@ -216,7 +216,7 @@ export const EditPollPage = () => {
                                     disabled={isGlobalLoading || !aiPrompt.trim()}
                                     sx={{ minWidth: 120, mt: 1 }}
                                 >
-                                    {isGenerating ? <CircularProgress size={24} color="inherit"/> : 'Generate'}
+                                    {isGenerating ? <CircularProgress size={24} color="inherit"/> : 'Сгенерировать'}
                                 </Button>
                             </Box>
                         </CardContent>
@@ -248,7 +248,7 @@ export const EditPollPage = () => {
                                     maxLength: 1000, needAiSummary: true
                                 } as any)}
                             >
-                                Text
+                                Текст
                             </Button>
 
                             <Button
@@ -260,7 +260,7 @@ export const EditPollPage = () => {
                                     possibleChoices: []
                                 } as any)}
                             >
-                                Single Choice
+                                Одиночный выбор
                             </Button>
 
                             <Button
@@ -272,7 +272,7 @@ export const EditPollPage = () => {
                                     possibleChoices: []
                                 } as any)}
                             >
-                                Multi Choice
+                                Множественный выбор
                             </Button>
                         </Box>
 
@@ -285,7 +285,7 @@ export const EditPollPage = () => {
                             }}
                         >
                             <Button type="submit" variant="contained" size="large" disabled={isSaving} sx={{ width: 300 }}>
-                                {isSaving ? 'Saving...' : 'Save Changes'}
+                                {isSaving ? 'Сохранение...' : 'Сохранить изменения'}
                             </Button>
                         </Box>
                     </form>
@@ -293,14 +293,14 @@ export const EditPollPage = () => {
             ) : (
                 <Card sx={{ p: 4, textAlign: 'center' }}>
                     <Typography variant="h6" color="text.secondary">
-                        Poll is active, editing is not allowed
+                        Опрос активен, редактирование недоступно
                     </Typography>
                     <Button
                         variant="contained"
                         sx={{ mt: 2 }}
                         onClick={() => navigate(`/polls/${id}/stats`)}
                     >
-                        View Statistics
+                        Просмотр статистики
                     </Button>
                 </Card>
             )}

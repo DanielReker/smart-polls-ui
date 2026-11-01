@@ -1,7 +1,8 @@
 import {Box} from "@mui/material";
+import type {PollResponseStatus} from "../api/model";
 
 interface PollStatusProps {
-    status?: string;
+    status: PollResponseStatus;
 }
 
 const PollStatus = (props: PollStatusProps) => {
@@ -12,9 +13,17 @@ const PollStatus = (props: PollStatusProps) => {
                 typography: 'caption', fontWeight: 'bold'
             }}
         >
-            {props.status || 'UNDEFINED'}
+            {getStatusName(props.status)}
         </Box>
     );
 };
+
+function getStatusName(status: PollResponseStatus): string {
+    switch (status) {
+        case "DRAFT": return "ЧЕРНОВИК";
+        case "ACTIVE": return "АКТИВЕН";
+        case "FINISHED": return "ЗАВЕРШЁН";
+    }
+}
 
 export default PollStatus;

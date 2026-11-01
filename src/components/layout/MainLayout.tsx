@@ -35,15 +35,15 @@ export const MainLayout = () => {
                                     variant="outlined"
                                     sx={{ color: 'white', borderColor: 'white', '& .MuiChip-icon': { color: 'white' } }}
                                 />
-                                <Button color="inherit" onClick={logout}>Log Out</Button>
+                                <Button color="inherit" onClick={logout}>Выйти</Button>
                             </>
                         ) : (
                             <>
                                 <Typography variant="caption" sx={{ display: { xs: 'none', sm: 'block' } }}>
-                                    You're guest
+                                    Вы гость
                                 </Typography>
                                 <Button color="inherit" variant="outlined" onClick={handleLoginClick}>
-                                    Sign In / Sign Up
+                                    Войти / Зарегистрироваться
                                 </Button>
                             </>
                         )}

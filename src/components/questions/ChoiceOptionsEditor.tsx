@@ -18,7 +18,7 @@ export const ChoiceOptionsEditor = ({nestIndex, control}: OptionsEditorProps) =>
 
     return (
         <Box sx={{mt: 2, pl: 2, borderLeft: '2px solid #eee'}}>
-            <Typography variant="subtitle2" gutterBottom>Options:</Typography>
+            <Typography variant="subtitle2" gutterBottom>Варианты:</Typography>
 
             {fields.map((item, k) => (
                 <Box key={item.id} sx={{display: 'flex', alignItems: 'center', mb: 1, gap: 1}}>
@@ -29,13 +29,13 @@ export const ChoiceOptionsEditor = ({nestIndex, control}: OptionsEditorProps) =>
                     <Controller
                         name={`questions.${nestIndex}.possibleChoices.${k}.name`}
                         control={control}
-                        rules={{required: "Option text is required"}}
+                        rules={{required: "Текст варианта обязателен"}}
                         render={({field, fieldState}) => (
                             <TextField
                                 {...field}
                                 size="small"
                                 fullWidth
-                                placeholder="Option text"
+                                placeholder="Текст варианта"
                                 error={!!fieldState.error}
                                 helperText={fieldState.error?.message}
                             />

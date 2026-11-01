@@ -38,7 +38,7 @@ export const PollNavigation = ({ pollId, status }: PollNavigationProps) => {
                 {(status === 'DRAFT' || currentTab === 'edit') && (
                     <Tab
                         icon={<EditIcon />}
-                        label="Editor"
+                        label="Редактор"
                         value="edit"
                         disabled={status !== 'DRAFT'} // Можно смотреть, но с disabled визуально понятнее
                     />
@@ -47,14 +47,14 @@ export const PollNavigation = ({ pollId, status }: PollNavigationProps) => {
                 {(status === 'ACTIVE' || status === 'FINISHED' || currentTab === 'stats') && (
                     <Tab
                         icon={<BarChartIcon />}
-                        label="Stats"
+                        label="Статистика"
                         value="stats"
                     />
                 )}
 
                 <Tab
                     icon={<HowToVoteIcon />}
-                    label={status === 'DRAFT' ? "Preview" : "Poll Link"}
+                    label={status === 'DRAFT' ? "Предпросмотр" : "Ссылка на опрос"}
                     value="take"
                 />
             </Tabs>

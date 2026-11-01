@@ -15,7 +15,7 @@ export const ChoiceStats = ({stats, title, questionData}: {
             <CardContent>
                 <Typography variant="h6" gutterBottom>{title}</Typography>
                 <Typography variant="caption" color="text.secondary" gutterBottom display="block">
-                    Total answers: {totalAnswers}
+                    Всего ответов: {totalAnswers}
                 </Typography>
                 <Divider sx={{mb: 2}}/>
 
@@ -30,7 +30,7 @@ export const ChoiceStats = ({stats, title, questionData}: {
                                         {questionData?.possibleChoices.find((c: {
                                                 id: number | undefined;
                                             }) => c.id === choice.id)?.name ||
-                                            `Option #${choice.id}`}
+                                            `Вариант №${choice.id}`}
                                     </Typography>
                                     <Typography variant="body2" color="text.secondary">
                                         {choice.count} ({percent}%)
@@ -54,7 +54,7 @@ export const ChoiceStats = ({stats, title, questionData}: {
                     })}
                     {sortedChoices.length === 0 && (
                         <Typography variant="body2" color="text.secondary" align="center">
-                            No options
+                            Нет вариантов
                         </Typography>
                     )}
                 </Stack>

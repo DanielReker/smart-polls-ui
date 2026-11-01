@@ -21,7 +21,7 @@ export const QuestionInputFactory = ({question, control}: InputFactoryProps) => 
     const {dtype, id, name, isRequired} = question;
 
     const rules = {
-        required: isRequired ? 'This field is required' : false
+        required: isRequired ? 'Это поле обязательно' : false
     };
 
     return (
@@ -39,13 +39,13 @@ export const QuestionInputFactory = ({question, control}: InputFactoryProps) => 
                             ...rules,
                             maxLength: {
                                 value: question.maxLength || 2000,
-                                message: `Max length: ${question.maxLength} symbols`
+                                message: `Максимальная длина: ${question.maxLength} символов`
                             }
                         }}
                         render={({field, fieldState}) => (
                             <TextField
                                 {...field}
-                                label="Your answer"
+                                label="Ваш ответ"
                                 multiline
                                 rows={3}
                                 fullWidth
@@ -88,7 +88,7 @@ export const QuestionInputFactory = ({question, control}: InputFactoryProps) => 
                         rules={{
                             validate: (value: any) => {
                                 if (isRequired && (!value || value.length === 0)) {
-                                    return 'Select at least one option';
+                                    return 'Выберите как минимум 1 вариант';
                                 }
                                 return true;
                             }

@@ -13,17 +13,17 @@ export const CreatePollPage = () => {
             const newPoll = await createPoll({ data });
             navigate(`/polls/${newPoll.id}/edit`);
         } catch {
-            alert(`Error while creating poll`);
+            alert(`Ошибка при создании опроса`);
         }
     };
 
     return (
         <Box maxWidth="sm" sx={{ mx: 'auto' }}>
-            <Typography variant="h5" gutterBottom>New poll</Typography>
+            <Typography variant="h5" gutterBottom>Новый опрос</Typography>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <TextField fullWidth label="Name" {...register('name')} margin="normal" required />
-                <TextField fullWidth label="Description" {...register('description')} margin="normal" multiline rows={3} />
-                <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>Next</Button>
+                <TextField fullWidth label="Название" {...register('name')} margin="normal" required />
+                <TextField fullWidth label="Описание" {...register('description')} margin="normal" multiline rows={3} />
+                <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>Далее</Button>
             </form>
         </Box>
     );

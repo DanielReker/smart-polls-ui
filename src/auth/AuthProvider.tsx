@@ -69,7 +69,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
      }
 
     if (!token && isPending) {
-        return <div>Initializing session...</div>;
+        return <div>Инициализация сессии...</div>;
     }
 
     return (

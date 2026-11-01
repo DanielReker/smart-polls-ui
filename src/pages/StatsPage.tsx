@@ -5,6 +5,7 @@ import {useGetPoll, useGetStats} from "../api/generated/poll-controller/poll-con
 import {Link, useParams} from "react-router";
 import {TextStats} from "../components/stats/TextStats.tsx";
 import {ChoiceStats} from "../components/stats/ChoiceStats.tsx";
+import {PollResponseStatus} from "../api/model";
 
 
 export const StatsPage = () => {
@@ -21,7 +22,7 @@ export const StatsPage = () => {
     const { data: pollData } = useGetPoll(id);
 
     const getQuestionTitle = (qId: number) => {
-        return pollData?.questions?.find((q: any) => q.id === qId)?.name || `Question #${qId}`;
+        return pollData?.questions?.find((q: any) => q.id === qId)?.name || `Вопрос №${qId}`;
     };
 
     if (isLoading && !statsData) {
@@ -35,7 +36,7 @@ export const StatsPage = () => {
     }
 
     if (isError || !statsData) {
-        return <Typography color="error" align="center" mt={4}>Failed to load statistics</Typography>;
+        return <Typography color="error" align="center" mt={4}>Не удалось загрузить статистику</Typography>;
     }
 
     const totalRespondents = statsData.submissionsCount;
@@ -49,19 +50,19 @@ export const StatsPage = () => {
                         startIcon={<ArrowBackIcon />}
                         sx={{ color: 'white', opacity: 0.8, mb: 1 }}
                     >
-                        Homepage
+                        Домашняя страница
                     </Button>
                     <Typography variant="h4" fontWeight="bold">
-                        {pollData?.name || 'Poll results'}
+                        {pollData?.name || 'Результаты опроса'}
                     </Typography>
                     <Stack direction="row" spacing={2} alignItems="center" mt={1}>
                         <Chip
                             icon={<PersonIcon />}
-                            label={`${totalRespondents} submissions`}
+                            label={`${totalRespondents} ответов`}
                             sx={{ bgcolor: 'rgba(255,255,255,0.2)', color: 'white', '& .MuiChip-icon': { color: 'white' } }}
                         />
                         <Chip
-                            label={pollData?.status}
+                            label={getStatusName(pollData?.status || PollResponseStatus.DRAFT)}
                             color={pollData?.status === 'ACTIVE' ? 'success' : 'default'}
                             size="small"
                         />
@@ -105,3 +106,11 @@ export const StatsPage = () => {
         </Box>
     );
 };
+
+function getStatusName(status: PollResponseStatus): string {
+    switch (status) {
+        case "DRAFT": return "ЧЕРНОВИК";
+        case "ACTIVE": return "АКТИВЕН";
+        case "FINISHED": return "ЗАВЕРШЁН";
+    }
+}

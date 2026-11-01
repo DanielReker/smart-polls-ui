@@ -37,10 +37,10 @@ export const TextStats = ({stats, title, pollId, questionData}: {
                     <Box>
                         <Typography variant="h6" gutterBottom>{title}</Typography>
                         <Typography variant="caption" color="text.secondary" display="block">
-                            Text answers: {stats.answerCount}
+                            Текстовые ответы: {stats.answerCount}
                         </Typography>
                     </Box>
-                    <Tooltip title="Summarize answers with AI">
+                    <Tooltip title="Обобщить с ИИ">
                 <span>
                     {needAiSummary && (
                         <Button
@@ -51,7 +51,7 @@ export const TextStats = ({stats, title, pollId, questionData}: {
                             disabled={isPending || justTriggered || stats.answerCount === 0}
                             color="secondary"
                         >
-                            {justTriggered ? 'Summarizing...' : 'AI Summary'}
+                            {justTriggered ? 'Обобщение...' : 'ИИ-обобщение'}
                         </Button>
                     )}
                 </span>
@@ -84,12 +84,12 @@ export const TextStats = ({stats, title, pollId, questionData}: {
                         color="text.secondary"
                     >
                         {stats.answerCount === 0 ? (
-                            <Typography variant="body2">No answers yet</Typography>
+                            <Typography variant="body2">Ещё нет ответов</Typography>
                         ) : (<>
                             {needAiSummary && (<>
                                 <AutoAwesomeIcon sx={{fontSize: 40, mb: 1, opacity: 0.3}}/>
                                 <Typography variant="body2">
-                                    Press AI Summary button to generate key insights
+                                    Нажмите кнопку ИИ-обобщения чтобы сгенерировать ключевые теги
                                 </Typography>
                             </>)}
                         </>)}

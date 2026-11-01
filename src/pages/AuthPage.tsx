@@ -33,11 +33,11 @@ export const AuthPage = () => {
             navigate(from, { replace: true });
         } catch (e: any) {
             if (e.response?.status === 401 || e.response?.status === 404) {
-                setError('Invalid login or password');
+                setError('Неверный логин или пароль');
             } else if (e.response?.status === 409) {
-                setError('Login is already used by other user');
+                setError('Логин уже занят другим пользователем');
             } else {
-                setError('Server error, please try again later');
+                setError('Ошибка сервера, пожалуйста, попробуйте позже');
             }
         } finally {
             setIsLoading(false);
@@ -53,43 +53,43 @@ export const AuthPage = () => {
                         onChange={(_, newVal) => { setMode(newVal); setError(null); }}
                         variant="fullWidth"
                     >
-                        <Tab label="Log In" value="login" />
-                        <Tab label="Sign Up" value="register" />
+                        <Tab label="Войти" value="login" />
+                        <Tab label="Зарегистрироваться" value="register" />
                     </Tabs>
                 </Box>
 
                 <CardContent sx={{ pt: 3 }}>
                     <Typography variant="h5" align="center" gutterBottom>
-                        {mode === 'login' ? 'Welcome back!' : 'Create new account'}
+                        {mode === 'login' ? 'С возвращением!' : 'Создать новый аккаунт'}
                     </Typography>
 
                     {mode === 'register' && (
                         <Typography variant="body2" color="text.secondary" align="center">
-                            Sign Up to keep access to your polls from any device
+                            Зарегистрируйтесь, чтобы сохранить доступ к вашим опросам с любых устройств
                         </Typography>
                     )}
 
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <TextField
-                            label="Login"
+                            label="Логин"
                             fullWidth
                             margin="normal"
                             {...formRegister('login', {
-                                required: 'Enter login',
-                                minLength: { value: 5, message: 'Login should be at least 5 symbols' }
+                                required: 'Придумайте логин',
+                                minLength: { value: 5, message: 'Логин должен содержать не менее 5 символов' }
                             })}
                             error={!!errors.login}
                             helperText={errors.login?.message as string}
                         />
 
                         <TextField
-                            label="Password"
+                            label="Пароль"
                             type="password"
                             fullWidth
                             margin="normal"
                             {...formRegister('password', {
-                                required: 'Enter password',
-                                minLength: { value: 6, message: 'Password should be at least 6 symbols' }
+                                required: 'Придумайте пароль',
+                                minLength: { value: 6, message: 'Пароль должен содержать не менее 5 символов' }
                             })}
                             error={!!errors.password}
                             helperText={errors.password?.message as string}
@@ -105,7 +105,7 @@ export const AuthPage = () => {
                             sx={{ mt: 3 }}
                             disabled={isLoading}
                         >
-                            {isLoading ? 'Loading...' : (mode === 'login' ? 'Log In' : 'Sign Up')}
+                            {isLoading ? 'Загрузка...' : (mode === 'login' ? 'Войти' : 'Зарегистрироваться')}
                         </Button>
                     </form>
                 </CardContent>

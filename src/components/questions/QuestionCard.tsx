@@ -40,29 +40,29 @@ export const QuestionCard = ({index, field, control, remove, move, isFirst, isLa
                                 typography: 'caption', fontWeight: 'bold'
                             }}
                         >
-                            {dtype === 'text' && 'TEXT'}
-                            {dtype === 'single-choice' && 'SINGLE'}
-                            {dtype === 'multi-choice' && 'MULTI'}
+                            {dtype === 'text' && 'ТЕКСТ'}
+                            {dtype === 'single-choice' && 'ОДИНОЧНЫЙ ВЫБОР'}
+                            {dtype === 'multi-choice' && 'МНОЖЕСТВЕННЫЙ ВЫБОР'}
                         </Box>
-                        <Typography variant="h6">Question #{index + 1}</Typography>
+                        <Typography variant="h6">Вопрос №{index + 1}</Typography>
                     </Box>
 
                     <Box>
-                        <Tooltip title="Move up">
+                        <Tooltip title="Переместить вверх">
                 <span>
                     <IconButton onClick={() => move(index, index - 1)} disabled={isFirst}>
                     <ArrowUpwardIcon/>
                     </IconButton>
                 </span>
                         </Tooltip>
-                        <Tooltip title="Move down">
+                        <Tooltip title="Переместить вниз">
                 <span>
                     <IconButton onClick={() => move(index, index + 1)} disabled={isLast}>
                     <ArrowDownwardIcon/>
                     </IconButton>
                 </span>
                         </Tooltip>
-                        <Tooltip title="Remove question">
+                        <Tooltip title="Удалить вопрос">
                             <IconButton color="error" onClick={() => remove(index)}>
                                 <DeleteIcon/>
                             </IconButton>
@@ -74,11 +74,11 @@ export const QuestionCard = ({index, field, control, remove, move, isFirst, isLa
                     <Controller
                         name={`questions.${index}.name`}
                         control={control}
-                        rules={{required: "Question text is required"}}
+                        rules={{required: "Текст вопроса обязателен"}}
                         render={({field, fieldState}) => (
                             <TextField
                                 {...field}
-                                label="Question text"
+                                label="Текст вопроса"
                                 fullWidth
                                 error={!!fieldState.error}
                                 helperText={fieldState.error?.message}
@@ -92,7 +92,7 @@ export const QuestionCard = ({index, field, control, remove, move, isFirst, isLa
                         render={({field, fieldState}) => (
                             <TextField
                                 {...field}
-                                label="Question description"
+                                label="Описание вопроса"
                                 fullWidth
                                 error={!!fieldState.error}
                                 helperText={fieldState.error?.message}
@@ -107,7 +107,7 @@ export const QuestionCard = ({index, field, control, remove, move, isFirst, isLa
                             render={({field}) => (
                                 <FormControlLabel
                                     control={<Switch {...field} checked={field.value}/>}
-                                    label="Required"
+                                    label="Обязателен"
                                 />
                             )}
                         />
@@ -119,7 +119,7 @@ export const QuestionCard = ({index, field, control, remove, move, isFirst, isLa
                                 render={({field}) => (
                                     <FormControlLabel
                                         control={<Switch {...field} checked={field.value} color="secondary"/>}
-                                        label="AI Summary"
+                                        label="Нужно ИИ-обобщение"
                                     />
                                 )}
                             />
@@ -131,7 +131,7 @@ export const QuestionCard = ({index, field, control, remove, move, isFirst, isLa
                             name={`questions.${index}.maxLength`}
                             control={control}
                             render={({field}) => (
-                                <TextField {...field} label="Max answer length" type="number" sx={{width: 200}}/>
+                                <TextField {...field} label="Максимальная длина ответа" type="number" sx={{width: 200}}/>
                             )}
                         />
                     )}

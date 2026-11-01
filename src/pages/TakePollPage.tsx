@@ -70,37 +70,37 @@ export const TakePollPage = () => {
             setIsSuccess(true);
         } catch (e) {
             console.error(e);
-            alert('Error while trying to submit answers');
+            alert('Ошибка при попытке отправить ответы');
         }
     };
 
     if (isLoading) return <Box display="flex" justifyContent="center" mt={4}><CircularProgress /></Box>;
-    if (error || !poll) return <Container sx={{ mt: 4 }}><Alert severity="error">Poll not found</Alert></Container>;
+    if (error || !poll) return <Container sx={{ mt: 4 }}><Alert severity="error">Опрос не найден</Alert></Container>;
     if (poll.status === 'DRAFT') return (
         <Card sx={{ p: 4, textAlign: 'center' }}>
             <Typography variant="h6" color="text.secondary">
-                Poll is not started yet
+                Опрос ещё не начался
             </Typography>
             <Button
                 variant="contained"
                 sx={{ mt: 2 }}
                 onClick={() => navigate(`/polls/${id}/edit`)}
             >
-                Go Edit
+                Перейти к редактированию
             </Button>
         </Card>
     )
     if (poll.status === 'FINISHED') return (
         <Card sx={{ p: 4, textAlign: 'center' }}>
             <Typography variant="h6" color="text.secondary">
-                Poll is already finished
+                Опрос уже завершён
             </Typography>
             <Button
                 variant="contained"
                 sx={{ mt: 2 }}
                 onClick={() => navigate(`/polls/${id}/stats`)}
             >
-                View Statistics
+                Просмотреть статистику
             </Button>
         </Card>
     );
@@ -109,12 +109,12 @@ export const TakePollPage = () => {
         return (
             <Container maxWidth="sm" sx={{ mt: 10, textAlign: 'center' }}>
                 <CheckCircleOutlineIcon color="success" sx={{ fontSize: 80, mb: 2 }} />
-                <Typography variant="h4" gutterBottom>Thank you!</Typography>
+                <Typography variant="h4" gutterBottom>Спасибо!</Typography>
                 <Typography variant="body1" color="text.secondary">
-                    Successfully submitted your answers
+                    Ваши ответы успешно отправлены
                 </Typography>
                 <Button component={Link} to="/" variant="contained" sx={{ mt: 2 }}>
-                    Homepage
+                    Домашняя страница
                 </Button>
             </Container>
         );
@@ -149,7 +149,7 @@ export const TakePollPage = () => {
                         disabled={isSubmitting}
                         sx={{ px: 4, py: 1.5 }}
                     >
-                        Submit answers
+                        Отправить ответы
                     </Button>
                 </Box>
             </form>
