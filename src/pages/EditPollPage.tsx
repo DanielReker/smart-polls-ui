@@ -245,7 +245,7 @@ export const EditPollPage = () => {
                                 disabled={isGlobalLoading}
                                 onClick={() => append({
                                     dtype: 'text', name: '', isRequired: true, position: 0,
-                                    maxLength: 1000, needAiSummary: true
+                                    maxLength: 1000
                                 } as any)}
                             >
                                 Текст

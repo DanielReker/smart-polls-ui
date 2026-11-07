@@ -3,21 +3,21 @@ info:
   title: OpenAPI definition
   version: v0
 servers:
-- url: http://localhost:8080
-  description: Generated server url
+  - url: http://localhost:8080
+    description: Generated server url
 paths:
   /polls/{pollId}/questions:
     put:
       tags:
-      - poll-controller
+        - poll-controller
       operationId: upsertQuestions
       parameters:
-      - name: pollId
-        in: path
-        required: true
-        schema:
-          type: integer
-          format: int64
+        - name: pollId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
       requestBody:
         content:
           application/json:
@@ -25,12 +25,6 @@ paths:
               $ref: "#/components/schemas/PollQuestionsUpsertRequest"
         required: true
       responses:
-        "401":
-          description: Unauthorized
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/ErrorDto"
         "409":
           description: Conflict
           content:
@@ -39,6 +33,12 @@ paths:
                 $ref: "#/components/schemas/ErrorDto"
         "404":
           description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        "401":
+          description: Unauthorized
           content:
             '*/*':
               schema:
@@ -50,19 +50,13 @@ paths:
               schema:
                 $ref: "#/components/schemas/PollResponse"
       security:
-      - bearer-key: []
+        - bearer-key: []
   /users:
     post:
       tags:
-      - user-controller
+        - user-controller
       operationId: createUser
       responses:
-        "401":
-          description: Unauthorized
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/ErrorDto"
         "409":
           description: Conflict
           content:
@@ -71,6 +65,12 @@ paths:
                 $ref: "#/components/schemas/ErrorDto"
         "404":
           description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        "401":
+          description: Unauthorized
           content:
             '*/*':
               schema:
@@ -84,14 +84,14 @@ paths:
   /users/{userLogin}/sessions:
     post:
       tags:
-      - user-controller
+        - user-controller
       operationId: login
       parameters:
-      - name: userLogin
-        in: path
-        required: true
-        schema:
-          type: string
+        - name: userLogin
+          in: path
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
@@ -99,12 +99,6 @@ paths:
               $ref: "#/components/schemas/LoginRequest"
         required: true
       responses:
-        "401":
-          description: Unauthorized
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/ErrorDto"
         "409":
           description: Conflict
           content:
@@ -113,6 +107,12 @@ paths:
                 $ref: "#/components/schemas/ErrorDto"
         "404":
           description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        "401":
+          description: Unauthorized
           content:
             '*/*':
               schema:
@@ -126,7 +126,7 @@ paths:
   /polls:
     post:
       tags:
-      - poll-controller
+        - poll-controller
       operationId: createPoll
       requestBody:
         content:
@@ -135,12 +135,6 @@ paths:
               $ref: "#/components/schemas/PollCreateRequest"
         required: true
       responses:
-        "401":
-          description: Unauthorized
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/ErrorDto"
         "409":
           description: Conflict
           content:
@@ -149,6 +143,12 @@ paths:
                 $ref: "#/components/schemas/ErrorDto"
         "404":
           description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        "401":
+          description: Unauthorized
           content:
             '*/*':
               schema:
@@ -160,19 +160,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/PollResponse"
       security:
-      - bearer-key: []
+        - bearer-key: []
   /polls/{pollId}/submissions:
     post:
       tags:
-      - poll-controller
+        - poll-controller
       operationId: createSubmission
       parameters:
-      - name: pollId
-        in: path
-        required: true
-        schema:
-          type: integer
-          format: int64
+        - name: pollId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
       requestBody:
         content:
           application/json:
@@ -180,12 +180,6 @@ paths:
               $ref: "#/components/schemas/SubmissionCreateRequest"
         required: true
       responses:
-        "401":
-          description: Unauthorized
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/ErrorDto"
         "409":
           description: Conflict
           content:
@@ -194,6 +188,12 @@ paths:
                 $ref: "#/components/schemas/ErrorDto"
         "404":
           description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        "401":
+          description: Unauthorized
           content:
             '*/*':
               schema:
@@ -205,26 +205,20 @@ paths:
               schema:
                 $ref: "#/components/schemas/SubmissionResponse"
       security:
-      - bearer-key: []
+        - bearer-key: []
   /polls/{pollId}/requests/start:
     post:
       tags:
-      - poll-controller
+        - poll-controller
       operationId: startPoll
       parameters:
-      - name: pollId
-        in: path
-        required: true
-        schema:
-          type: integer
-          format: int64
+        - name: pollId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
       responses:
-        "401":
-          description: Unauthorized
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/ErrorDto"
         "409":
           description: Conflict
           content:
@@ -237,6 +231,12 @@ paths:
             '*/*':
               schema:
                 $ref: "#/components/schemas/ErrorDto"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
         "200":
           description: OK
           content:
@@ -244,26 +244,20 @@ paths:
               schema:
                 $ref: "#/components/schemas/PollResponse"
       security:
-      - bearer-key: []
+        - bearer-key: []
   /polls/{pollId}/requests/finish:
     post:
       tags:
-      - poll-controller
+        - poll-controller
       operationId: finishPoll
       parameters:
-      - name: pollId
-        in: path
-        required: true
-        schema:
-          type: integer
-          format: int64
+        - name: pollId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
       responses:
-        "401":
-          description: Unauthorized
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/ErrorDto"
         "409":
           description: Conflict
           content:
@@ -276,6 +270,12 @@ paths:
             '*/*':
               schema:
                 $ref: "#/components/schemas/ErrorDto"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
         "200":
           description: OK
           content:
@@ -283,19 +283,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/PollResponse"
       security:
-      - bearer-key: []
+        - bearer-key: []
   /polls/{pollId}/questions:ai-generate:
     post:
       tags:
-      - poll-controller
+        - poll-controller
       operationId: aiGenerateQuestions
       parameters:
-      - name: pollId
-        in: path
-        required: true
-        schema:
-          type: integer
-          format: int64
+        - name: pollId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
       requestBody:
         content:
           application/json:
@@ -303,12 +303,6 @@ paths:
               $ref: "#/components/schemas/AiGenerateQuestionsRequest"
         required: true
       responses:
-        "401":
-          description: Unauthorized
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/ErrorDto"
         "409":
           description: Conflict
           content:
@@ -317,6 +311,12 @@ paths:
                 $ref: "#/components/schemas/ErrorDto"
         "404":
           description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        "401":
+          description: Unauthorized
           content:
             '*/*':
               schema:
@@ -328,52 +328,11 @@ paths:
               schema:
                 $ref: "#/components/schemas/PollResponse"
       security:
-      - bearer-key: []
-  /polls/{pollId}/questions/{textQuestionId}/ai-summary:
-    post:
-      tags:
-      - poll-controller
-      operationId: summarizeTextQuestion
-      parameters:
-      - name: pollId
-        in: path
-        required: true
-        schema:
-          type: integer
-          format: int64
-      - name: textQuestionId
-        in: path
-        required: true
-        schema:
-          type: integer
-          format: int64
-      responses:
-        "401":
-          description: Unauthorized
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/ErrorDto"
-        "409":
-          description: Conflict
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/ErrorDto"
-        "404":
-          description: Not Found
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/ErrorDto"
-        "200":
-          description: OK
-      security:
-      - bearer-key: []
+        - bearer-key: []
   /users/me/credentials:
     patch:
       tags:
-      - user-controller
+        - user-controller
       operationId: updateCredentials
       requestBody:
         content:
@@ -382,12 +341,6 @@ paths:
               $ref: "#/components/schemas/ChangeCredentialsRequest"
         required: true
       responses:
-        "401":
-          description: Unauthorized
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/ErrorDto"
         "409":
           description: Conflict
           content:
@@ -396,6 +349,12 @@ paths:
                 $ref: "#/components/schemas/ErrorDto"
         "404":
           description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        "401":
+          description: Unauthorized
           content:
             '*/*':
               schema:
@@ -403,19 +362,13 @@ paths:
         "200":
           description: OK
       security:
-      - bearer-key: []
+        - bearer-key: []
   /users/me:
     get:
       tags:
-      - user-controller
+        - user-controller
       operationId: getUserMe
       responses:
-        "401":
-          description: Unauthorized
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/ErrorDto"
         "409":
           description: Conflict
           content:
@@ -424,6 +377,12 @@ paths:
                 $ref: "#/components/schemas/ErrorDto"
         "404":
           description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        "401":
+          description: Unauthorized
           content:
             '*/*':
               schema:
@@ -435,26 +394,20 @@ paths:
               schema:
                 $ref: "#/components/schemas/UserResponse"
       security:
-      - bearer-key: []
+        - bearer-key: []
   /polls/{pollId}:
     get:
       tags:
-      - poll-controller
+        - poll-controller
       operationId: getPoll
       parameters:
-      - name: pollId
-        in: path
-        required: true
-        schema:
-          type: integer
-          format: int64
+        - name: pollId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
       responses:
-        "401":
-          description: Unauthorized
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/ErrorDto"
         "409":
           description: Conflict
           content:
@@ -463,6 +416,12 @@ paths:
                 $ref: "#/components/schemas/ErrorDto"
         "404":
           description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        "401":
+          description: Unauthorized
           content:
             '*/*':
               schema:
@@ -474,26 +433,20 @@ paths:
               schema:
                 $ref: "#/components/schemas/PollResponse"
       security:
-      - bearer-key: []
+        - bearer-key: []
   /polls/{pollId}/stats:
     get:
       tags:
-      - poll-controller
+        - poll-controller
       operationId: getStats
       parameters:
-      - name: pollId
-        in: path
-        required: true
-        schema:
-          type: integer
-          format: int64
+        - name: pollId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
       responses:
-        "401":
-          description: Unauthorized
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/ErrorDto"
         "409":
           description: Conflict
           content:
@@ -502,6 +455,12 @@ paths:
                 $ref: "#/components/schemas/ErrorDto"
         "404":
           description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        "401":
+          description: Unauthorized
           content:
             '*/*':
               schema:
@@ -513,19 +472,13 @@ paths:
               schema:
                 $ref: "#/components/schemas/StatsResponse"
       security:
-      - bearer-key: []
+        - bearer-key: []
   /polls/my:
     get:
       tags:
-      - poll-controller
+        - poll-controller
       operationId: getMyPolls
       responses:
-        "401":
-          description: Unauthorized
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/ErrorDto"
         "409":
           description: Conflict
           content:
@@ -534,6 +487,12 @@ paths:
                 $ref: "#/components/schemas/ErrorDto"
         "404":
           description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        "401":
+          description: Unauthorized
           content:
             '*/*':
               schema:
@@ -545,19 +504,13 @@ paths:
               schema:
                 $ref: "#/components/schemas/PollsResponse"
       security:
-      - bearer-key: []
+        - bearer-key: []
   /users/me/sessions:
     delete:
       tags:
-      - user-controller
+        - user-controller
       operationId: logoutEverywhere
       responses:
-        "401":
-          description: Unauthorized
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/ErrorDto"
         "409":
           description: Conflict
           content:
@@ -570,22 +523,22 @@ paths:
             '*/*':
               schema:
                 $ref: "#/components/schemas/ErrorDto"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
         "200":
           description: OK
       security:
-      - bearer-key: []
+        - bearer-key: []
   /users/me/sessions/current:
     delete:
       tags:
-      - user-controller
+        - user-controller
       operationId: logout
       responses:
-        "401":
-          description: Unauthorized
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/ErrorDto"
         "409":
           description: Conflict
           content:
@@ -598,10 +551,16 @@ paths:
             '*/*':
               schema:
                 $ref: "#/components/schemas/ErrorDto"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
         "200":
           description: OK
       security:
-      - bearer-key: []
+        - bearer-key: []
 components:
   schemas:
     ErrorDto:
@@ -610,7 +569,7 @@ components:
         message:
           type: string
       required:
-      - message
+        - message
     ChoiceDto:
       type: object
       properties:
@@ -624,22 +583,22 @@ components:
           format: int32
           minimum: 0
       required:
-      - name
-      - position
+        - name
+        - position
     MultiChoiceQuestionDto:
       allOf:
-      - $ref: "#/components/schemas/QuestionDto"
-      - type: object
-        properties:
-          possibleChoices:
-            type: array
-            items:
-              $ref: "#/components/schemas/ChoiceDto"
+        - $ref: "#/components/schemas/QuestionDto"
+        - type: object
+          properties:
+            possibleChoices:
+              type: array
+              items:
+                $ref: "#/components/schemas/ChoiceDto"
       required:
-      - isRequired
-      - name
-      - position
-      - possibleChoices
+        - isRequired
+        - name
+        - position
+        - possibleChoices
     PollQuestionsUpsertRequest:
       type: object
       properties:
@@ -647,11 +606,11 @@ components:
           type: array
           items:
             oneOf:
-            - $ref: "#/components/schemas/MultiChoiceQuestionDto"
-            - $ref: "#/components/schemas/SingleChoiceQuestionDto"
-            - $ref: "#/components/schemas/TextQuestionDto"
+              - $ref: "#/components/schemas/MultiChoiceQuestionDto"
+              - $ref: "#/components/schemas/SingleChoiceQuestionDto"
+              - $ref: "#/components/schemas/TextQuestionDto"
       required:
-      - questions
+        - questions
     QuestionDto:
       type: object
       discriminator:
@@ -675,38 +634,36 @@ components:
         dtype:
           type: string
       required:
-      - dtype
-      - isRequired
-      - name
-      - position
+        - dtype
+        - isRequired
+        - name
+        - position
     SingleChoiceQuestionDto:
       allOf:
-      - $ref: "#/components/schemas/QuestionDto"
-      - type: object
-        properties:
-          possibleChoices:
-            type: array
-            items:
-              $ref: "#/components/schemas/ChoiceDto"
+        - $ref: "#/components/schemas/QuestionDto"
+        - type: object
+          properties:
+            possibleChoices:
+              type: array
+              items:
+                $ref: "#/components/schemas/ChoiceDto"
       required:
-      - isRequired
-      - name
-      - position
-      - possibleChoices
+        - isRequired
+        - name
+        - position
+        - possibleChoices
     TextQuestionDto:
       allOf:
-      - $ref: "#/components/schemas/QuestionDto"
-      - type: object
-        properties:
-          maxLength:
-            type: integer
-            format: int32
-          needAiSummary:
-            type: boolean
+        - $ref: "#/components/schemas/QuestionDto"
+        - type: object
+          properties:
+            maxLength:
+              type: integer
+              format: int32
       required:
-      - isRequired
-      - name
-      - position
+        - isRequired
+        - name
+        - position
     PollResponse:
       type: object
       properties:
@@ -725,33 +682,33 @@ components:
         status:
           type: string
           enum:
-          - DRAFT
-          - ACTIVE
-          - FINISHED
+            - DRAFT
+            - ACTIVE
+            - FINISHED
         questions:
           type: array
           items:
             oneOf:
-            - $ref: "#/components/schemas/MultiChoiceQuestionDto"
-            - $ref: "#/components/schemas/SingleChoiceQuestionDto"
-            - $ref: "#/components/schemas/TextQuestionDto"
+              - $ref: "#/components/schemas/MultiChoiceQuestionDto"
+              - $ref: "#/components/schemas/SingleChoiceQuestionDto"
+              - $ref: "#/components/schemas/TextQuestionDto"
         mySubmissionsCount:
           type: integer
           format: int64
       required:
-      - createdDate
-      - id
-      - mySubmissionsCount
-      - name
-      - questions
-      - status
+        - createdDate
+        - id
+        - mySubmissionsCount
+        - name
+        - questions
+        - status
     SessionResponse:
       type: object
       properties:
         token:
           type: string
       required:
-      - token
+        - token
     LoginRequest:
       type: object
       properties:
@@ -767,7 +724,7 @@ components:
         description:
           type: string
       required:
-      - name
+        - name
     AnswerDto:
       type: object
       discriminator:
@@ -782,32 +739,32 @@ components:
         dtype:
           type: string
       required:
-      - dtype
-      - questionId
+        - dtype
+        - questionId
     MultiChoiceAnswerDto:
       allOf:
-      - $ref: "#/components/schemas/AnswerDto"
-      - type: object
-        properties:
-          selectedChoiceIds:
-            type: array
-            items:
+        - $ref: "#/components/schemas/AnswerDto"
+        - type: object
+          properties:
+            selectedChoiceIds:
+              type: array
+              items:
+                type: integer
+                format: int64
+      required:
+        - questionId
+        - selectedChoiceIds
+    SingleChoiceAnswerDto:
+      allOf:
+        - $ref: "#/components/schemas/AnswerDto"
+        - type: object
+          properties:
+            selectedChoiceId:
               type: integer
               format: int64
       required:
-      - questionId
-      - selectedChoiceIds
-    SingleChoiceAnswerDto:
-      allOf:
-      - $ref: "#/components/schemas/AnswerDto"
-      - type: object
-        properties:
-          selectedChoiceId:
-            type: integer
-            format: int64
-      required:
-      - questionId
-      - selectedChoiceId
+        - questionId
+        - selectedChoiceId
     SubmissionCreateRequest:
       type: object
       properties:
@@ -815,21 +772,21 @@ components:
           type: array
           items:
             oneOf:
-            - $ref: "#/components/schemas/MultiChoiceAnswerDto"
-            - $ref: "#/components/schemas/SingleChoiceAnswerDto"
-            - $ref: "#/components/schemas/TextAnswerDto"
+              - $ref: "#/components/schemas/MultiChoiceAnswerDto"
+              - $ref: "#/components/schemas/SingleChoiceAnswerDto"
+              - $ref: "#/components/schemas/TextAnswerDto"
       required:
-      - answers
+        - answers
     TextAnswerDto:
       allOf:
-      - $ref: "#/components/schemas/AnswerDto"
-      - type: object
-        properties:
-          value:
-            type: string
+        - $ref: "#/components/schemas/AnswerDto"
+        - type: object
+          properties:
+            value:
+              type: string
       required:
-      - questionId
-      - value
+        - questionId
+        - value
     SubmissionResponse:
       type: object
       properties:
@@ -846,21 +803,21 @@ components:
           type: array
           items:
             oneOf:
-            - $ref: "#/components/schemas/MultiChoiceAnswerDto"
-            - $ref: "#/components/schemas/SingleChoiceAnswerDto"
-            - $ref: "#/components/schemas/TextAnswerDto"
+              - $ref: "#/components/schemas/MultiChoiceAnswerDto"
+              - $ref: "#/components/schemas/SingleChoiceAnswerDto"
+              - $ref: "#/components/schemas/TextAnswerDto"
       required:
-      - answers
-      - createdDate
-      - id
-      - pollId
+        - answers
+        - createdDate
+        - id
+        - pollId
     AiGenerateQuestionsRequest:
       type: object
       properties:
         prompt:
           type: string
       required:
-      - prompt
+        - prompt
     ChangeCredentialsRequest:
       type: object
       properties:
@@ -886,22 +843,11 @@ components:
           items:
             type: string
             enum:
-            - ANONYMOUS
-            - REGISTERED
-            - ADMIN
+              - ANONYMOUS
+              - REGISTERED
+              - ADMIN
         isRegistered:
           type: boolean
-    AiTextQuestionSummaryTagDto:
-      type: object
-      properties:
-        tag:
-          type: string
-        count:
-          type: integer
-          format: int64
-      required:
-      - count
-      - tag
     ChoiceStatsDto:
       type: object
       properties:
@@ -913,20 +859,20 @@ components:
           format: int64
           minimum: 0
       required:
-      - count
+        - count
     MultiChoiceQuestionStatsDto:
       allOf:
-      - $ref: "#/components/schemas/QuestionStatsDto"
-      - type: object
-        properties:
-          choiceStats:
-            type: array
-            items:
-              $ref: "#/components/schemas/ChoiceStatsDto"
+        - $ref: "#/components/schemas/QuestionStatsDto"
+        - type: object
+          properties:
+            choiceStats:
+              type: array
+              items:
+                $ref: "#/components/schemas/ChoiceStatsDto"
       required:
-      - answerCount
-      - choiceStats
-      - questionId
+        - answerCount
+        - choiceStats
+        - questionId
     QuestionStatsDto:
       type: object
       discriminator:
@@ -941,22 +887,22 @@ components:
         dtype:
           type: string
       required:
-      - answerCount
-      - dtype
-      - questionId
+        - answerCount
+        - dtype
+        - questionId
     SingleChoiceQuestionStatsDto:
       allOf:
-      - $ref: "#/components/schemas/QuestionStatsDto"
-      - type: object
-        properties:
-          choiceStats:
-            type: array
-            items:
-              $ref: "#/components/schemas/ChoiceStatsDto"
+        - $ref: "#/components/schemas/QuestionStatsDto"
+        - type: object
+          properties:
+            choiceStats:
+              type: array
+              items:
+                $ref: "#/components/schemas/ChoiceStatsDto"
       required:
-      - answerCount
-      - choiceStats
-      - questionId
+        - answerCount
+        - choiceStats
+        - questionId
     StatsResponse:
       type: object
       properties:
@@ -967,29 +913,18 @@ components:
           type: array
           items:
             oneOf:
-            - $ref: "#/components/schemas/MultiChoiceQuestionStatsDto"
-            - $ref: "#/components/schemas/SingleChoiceQuestionStatsDto"
-            - $ref: "#/components/schemas/TextQuestionStatsDto"
+              - $ref: "#/components/schemas/MultiChoiceQuestionStatsDto"
+              - $ref: "#/components/schemas/SingleChoiceQuestionStatsDto"
+              - $ref: "#/components/schemas/TextQuestionStatsDto"
       required:
-      - stats
-      - submissionsCount
+        - stats
+        - submissionsCount
     TextQuestionStatsDto:
       allOf:
-      - $ref: "#/components/schemas/QuestionStatsDto"
-      - type: object
-        properties:
-          tagsCount:
-            type: integer
-            format: int64
-          tags:
-            type: array
-            items:
-              $ref: "#/components/schemas/AiTextQuestionSummaryTagDto"
+        - $ref: "#/components/schemas/QuestionStatsDto"
       required:
-      - answerCount
-      - questionId
-      - tags
-      - tagsCount
+        - answerCount
+        - questionId
     PollsResponse:
       type: object
       properties:
@@ -1015,14 +950,14 @@ components:
         status:
           type: string
           enum:
-          - DRAFT
-          - ACTIVE
-          - FINISHED
+            - DRAFT
+            - ACTIVE
+            - FINISHED
       required:
-      - createdDate
-      - id
-      - name
-      - status
+        - createdDate
+        - id
+        - name
+        - status
   securitySchemes:
     bearer-key:
       type: http

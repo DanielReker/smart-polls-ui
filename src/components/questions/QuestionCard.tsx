@@ -111,19 +111,6 @@ export const QuestionCard = ({index, field, control, remove, move, isFirst, isLa
                                 />
                             )}
                         />
-
-                        {dtype === 'text' && (
-                            <Controller
-                                name={`questions.${index}.needAiSummary`}
-                                control={control}
-                                render={({field}) => (
-                                    <FormControlLabel
-                                        control={<Switch {...field} checked={field.value} color="secondary"/>}
-                                        label="Нужно ИИ-обобщение"
-                                    />
-                                )}
-                            />
-                        )}
                     </Box>
 
                     {dtype === 'text' && (

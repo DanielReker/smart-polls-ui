@@ -5,6 +5,5 @@
  * OpenAPI spec version: v0
  */
 import type { QuestionStatsDto } from './questionStatsDto';
-import type { TextQuestionStatsDtoAllOf } from './textQuestionStatsDtoAllOf';
 
-export type TextQuestionStatsDto = QuestionStatsDto & TextQuestionStatsDtoAllOf & Required<Pick<QuestionStatsDto & TextQuestionStatsDtoAllOf, 'tags' | 'tagsCount'>>;
+export type TextQuestionStatsDto = QuestionStatsDto;

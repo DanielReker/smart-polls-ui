@@ -7,5 +7,4 @@
 
 export type TextQuestionDtoAllOf = {
   maxLength?: number;
-  needAiSummary?: boolean;
 };

@@ -6,7 +6,6 @@
  */
 
 export * from './aiGenerateQuestionsRequest';
-export * from './aiTextQuestionSummaryTagDto';
 export * from './answerDto';
 export * from './changeCredentialsRequest';
 export * from './choiceDto';
@@ -48,6 +47,5 @@ export * from './textAnswerDtoAllOf';
 export * from './textQuestionDto';
 export * from './textQuestionDtoAllOf';
 export * from './textQuestionStatsDto';
-export * from './textQuestionStatsDtoAllOf';
 export * from './userResponse';
 export * from './userResponseRolesItem';

@@ -388,63 +388,6 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
       return useMutation(mutationOptions, queryClient);
     }
-    export const summarizeTextQuestion = (
-    pollId: number,
-    textQuestionId: number,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
-      
-      
-      return customInstance<void>(
-      {url: `/polls/${pollId}/questions/${textQuestionId}/ai-summary`, method: 'POST', signal
-    },
-      options);
-    }
-  
-
-
-export const getSummarizeTextQuestionMutationOptions = <TError = ErrorDto | ErrorDto | ErrorDto,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof summarizeTextQuestion>>, TError,{pollId: number;textQuestionId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof summarizeTextQuestion>>, TError,{pollId: number;textQuestionId: number}, TContext> => {
-
-const mutationKey = ['summarizeTextQuestion'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof summarizeTextQuestion>>, {pollId: number;textQuestionId: number}> = (props) => {
-          const {pollId,textQuestionId} = props ?? {};
-
-          return  summarizeTextQuestion(pollId,textQuestionId,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type SummarizeTextQuestionMutationResult = NonNullable<Awaited<ReturnType<typeof summarizeTextQuestion>>>
-    
-    export type SummarizeTextQuestionMutationError = ErrorDto | ErrorDto | ErrorDto
-
-    export const useSummarizeTextQuestion = <TError = ErrorDto | ErrorDto | ErrorDto,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof summarizeTextQuestion>>, TError,{pollId: number;textQuestionId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof summarizeTextQuestion>>,
-        TError,
-        {pollId: number;textQuestionId: number},
-        TContext
-      > => {
-
-      const mutationOptions = getSummarizeTextQuestionMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
     export const getPoll = (
     pollId: number,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal

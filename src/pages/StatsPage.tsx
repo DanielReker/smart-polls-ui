@@ -88,8 +88,6 @@ export const StatsPage = () => {
                                     <TextStats
                                         stats={statItem}
                                         title={title}
-                                        pollId={id}
-                                        questionData={questionData}
                                     />
                                 ) : (
                                     <ChoiceStats
