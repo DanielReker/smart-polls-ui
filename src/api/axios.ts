@@ -1,7 +1,7 @@
 import axios, {type AxiosRequestConfig} from 'axios';
 
 export const AXIOS_INSTANCE = axios.create({
-    baseURL: 'http://localhost:8080',
+    baseURL: '/api',
 });
 
 AXIOS_INSTANCE.interceptors.request.use((config) => {
@@ -22,14 +22,13 @@ AXIOS_INSTANCE.interceptors.response.use(
     }
 );
 
-export const customInstance = <T>(
+export const customInstance = async <T>(
     config: AxiosRequestConfig,
     options?: AxiosRequestConfig,
 ): Promise<T> => {
-    const promise = AXIOS_INSTANCE({
+    const {data} = await AXIOS_INSTANCE({
         ...config,
         ...options,
-    }).then(({ data }) => data);
-
-    return promise;
+    });
+    return data;
 };

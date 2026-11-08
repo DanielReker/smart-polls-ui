@@ -25,6 +25,12 @@ paths:
               $ref: "#/components/schemas/PollQuestionsUpsertRequest"
         required: true
       responses:
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
         "409":
           description: Conflict
           content:
@@ -33,12 +39,6 @@ paths:
                 $ref: "#/components/schemas/ErrorDto"
         "404":
           description: Not Found
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/ErrorDto"
-        "401":
-          description: Unauthorized
           content:
             '*/*':
               schema:
@@ -57,6 +57,12 @@ paths:
         - user-controller
       operationId: createUser
       responses:
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
         "409":
           description: Conflict
           content:
@@ -65,12 +71,6 @@ paths:
                 $ref: "#/components/schemas/ErrorDto"
         "404":
           description: Not Found
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/ErrorDto"
-        "401":
-          description: Unauthorized
           content:
             '*/*':
               schema:
@@ -99,6 +99,12 @@ paths:
               $ref: "#/components/schemas/LoginRequest"
         required: true
       responses:
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
         "409":
           description: Conflict
           content:
@@ -107,12 +113,6 @@ paths:
                 $ref: "#/components/schemas/ErrorDto"
         "404":
           description: Not Found
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/ErrorDto"
-        "401":
-          description: Unauthorized
           content:
             '*/*':
               schema:
@@ -135,6 +135,12 @@ paths:
               $ref: "#/components/schemas/PollCreateRequest"
         required: true
       responses:
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
         "409":
           description: Conflict
           content:
@@ -143,12 +149,6 @@ paths:
                 $ref: "#/components/schemas/ErrorDto"
         "404":
           description: Not Found
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/ErrorDto"
-        "401":
-          description: Unauthorized
           content:
             '*/*':
               schema:
@@ -180,6 +180,12 @@ paths:
               $ref: "#/components/schemas/SubmissionCreateRequest"
         required: true
       responses:
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
         "409":
           description: Conflict
           content:
@@ -188,12 +194,6 @@ paths:
                 $ref: "#/components/schemas/ErrorDto"
         "404":
           description: Not Found
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/ErrorDto"
-        "401":
-          description: Unauthorized
           content:
             '*/*':
               schema:
@@ -219,6 +219,12 @@ paths:
             type: integer
             format: int64
       responses:
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
         "409":
           description: Conflict
           content:
@@ -227,12 +233,6 @@ paths:
                 $ref: "#/components/schemas/ErrorDto"
         "404":
           description: Not Found
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/ErrorDto"
-        "401":
-          description: Unauthorized
           content:
             '*/*':
               schema:
@@ -258,6 +258,12 @@ paths:
             type: integer
             format: int64
       responses:
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
         "409":
           description: Conflict
           content:
@@ -266,12 +272,6 @@ paths:
                 $ref: "#/components/schemas/ErrorDto"
         "404":
           description: Not Found
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/ErrorDto"
-        "401":
-          description: Unauthorized
           content:
             '*/*':
               schema:
@@ -303,6 +303,12 @@ paths:
               $ref: "#/components/schemas/AiGenerateQuestionsRequest"
         required: true
       responses:
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
         "409":
           description: Conflict
           content:
@@ -311,12 +317,6 @@ paths:
                 $ref: "#/components/schemas/ErrorDto"
         "404":
           description: Not Found
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/ErrorDto"
-        "401":
-          description: Unauthorized
           content:
             '*/*':
               schema:
@@ -341,6 +341,12 @@ paths:
               $ref: "#/components/schemas/ChangeCredentialsRequest"
         required: true
       responses:
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
         "409":
           description: Conflict
           content:
@@ -349,12 +355,6 @@ paths:
                 $ref: "#/components/schemas/ErrorDto"
         "404":
           description: Not Found
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/ErrorDto"
-        "401":
-          description: Unauthorized
           content:
             '*/*':
               schema:
@@ -369,6 +369,12 @@ paths:
         - user-controller
       operationId: getUserMe
       responses:
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
         "409":
           description: Conflict
           content:
@@ -377,12 +383,6 @@ paths:
                 $ref: "#/components/schemas/ErrorDto"
         "404":
           description: Not Found
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/ErrorDto"
-        "401":
-          description: Unauthorized
           content:
             '*/*':
               schema:
@@ -408,6 +408,12 @@ paths:
             type: integer
             format: int64
       responses:
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
         "409":
           description: Conflict
           content:
@@ -416,12 +422,6 @@ paths:
                 $ref: "#/components/schemas/ErrorDto"
         "404":
           description: Not Found
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/ErrorDto"
-        "401":
-          description: Unauthorized
           content:
             '*/*':
               schema:
@@ -447,6 +447,12 @@ paths:
             type: integer
             format: int64
       responses:
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
         "409":
           description: Conflict
           content:
@@ -455,12 +461,6 @@ paths:
                 $ref: "#/components/schemas/ErrorDto"
         "404":
           description: Not Found
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/ErrorDto"
-        "401":
-          description: Unauthorized
           content:
             '*/*':
               schema:
@@ -479,6 +479,12 @@ paths:
         - poll-controller
       operationId: getMyPolls
       responses:
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
         "409":
           description: Conflict
           content:
@@ -487,12 +493,6 @@ paths:
                 $ref: "#/components/schemas/ErrorDto"
         "404":
           description: Not Found
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/ErrorDto"
-        "401":
-          description: Unauthorized
           content:
             '*/*':
               schema:
@@ -511,6 +511,12 @@ paths:
         - user-controller
       operationId: logoutEverywhere
       responses:
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
         "409":
           description: Conflict
           content:
@@ -519,12 +525,6 @@ paths:
                 $ref: "#/components/schemas/ErrorDto"
         "404":
           description: Not Found
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/ErrorDto"
-        "401":
-          description: Unauthorized
           content:
             '*/*':
               schema:
@@ -539,6 +539,12 @@ paths:
         - user-controller
       operationId: logout
       responses:
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
         "409":
           description: Conflict
           content:
@@ -547,12 +553,6 @@ paths:
                 $ref: "#/components/schemas/ErrorDto"
         "404":
           description: Not Found
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/ErrorDto"
-        "401":
-          description: Unauthorized
           content:
             '*/*':
               schema:
@@ -574,7 +574,9 @@ components:
       type: object
       properties:
         id:
-          type: integer
+          type:
+            - integer
+            - "null"
           format: int64
         name:
           type: string
@@ -617,14 +619,18 @@ components:
         propertyName: dtype
       properties:
         id:
-          type: integer
+          type:
+            - integer
+            - "null"
           format: int64
         name:
           type: string
           maxLength: 255
           minLength: 0
         description:
-          type: string
+          type:
+            - string
+            - "null"
         isRequired:
           type: boolean
         position:
@@ -658,7 +664,9 @@ components:
         - type: object
           properties:
             maxLength:
-              type: integer
+              type:
+                - integer
+                - "null"
               format: int32
       required:
         - isRequired
@@ -678,7 +686,9 @@ components:
           maxLength: 255
           minLength: 0
         description:
-          type: string
+          type:
+            - string
+            - "null"
         status:
           type: string
           enum:
@@ -722,7 +732,9 @@ components:
           maxLength: 255
           minLength: 0
         description:
-          type: string
+          type:
+            - string
+            - "null"
       required:
         - name
     AnswerDto:
@@ -731,7 +743,9 @@ components:
         propertyName: dtype
       properties:
         id:
-          type: integer
+          type:
+            - integer
+            - "null"
           format: int64
         questionId:
           type: integer
@@ -822,12 +836,18 @@ components:
       type: object
       properties:
         currentPassword:
-          type: string
+          type:
+            - string
+            - "null"
         newLogin:
-          type: string
+          type:
+            - string
+            - "null"
           pattern: "^[a-zA-Z0-9._-]{5,30}$"
         newPassword:
-          type: string
+          type:
+            - string
+            - "null"
           maxLength: 2147483647
           minLength: 6
     UserResponse:
@@ -837,7 +857,9 @@ components:
           type: integer
           format: int64
         login:
-          type: string
+          type:
+            - string
+            - "null"
         roles:
           type: array
           items:
@@ -848,11 +870,17 @@ components:
               - ADMIN
         isRegistered:
           type: boolean
+      required:
+        - id
+        - isRegistered
+        - roles
     ChoiceStatsDto:
       type: object
       properties:
         id:
-          type: integer
+          type:
+            - integer
+            - "null"
           format: int64
         count:
           type: integer
@@ -932,6 +960,8 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/ShortPollResponse"
+      required:
+        - polls
     ShortPollResponse:
       type: object
       properties:
@@ -946,7 +976,9 @@ components:
           maxLength: 255
           minLength: 0
         description:
-          type: string
+          type:
+            - string
+            - "null"
         status:
           type: string
           enum:
