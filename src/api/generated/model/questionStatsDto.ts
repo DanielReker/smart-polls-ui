@@ -6,7 +6,7 @@
  */
 
 export interface QuestionStatsDto {
-  questionId: number;
   answerCount: number;
   dtype: string;
+  questionId: number;
 }

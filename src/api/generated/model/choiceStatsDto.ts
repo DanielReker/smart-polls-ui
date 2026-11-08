@@ -6,8 +6,8 @@
  */
 
 export interface ChoiceStatsDto {
-  /** @nullable */
-  id?: number | null;
   /** @minimum 0 */
   count: number;
+  /** @nullable */
+  id?: number | null;
 }

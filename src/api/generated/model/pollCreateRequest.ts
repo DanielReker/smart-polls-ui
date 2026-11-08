@@ -6,11 +6,11 @@
  */
 
 export interface PollCreateRequest {
+  /** @nullable */
+  description?: string | null;
   /**
      * @minLength 0
      * @maxLength 255
      */
   name: string;
-  /** @nullable */
-  description?: string | null;
 }

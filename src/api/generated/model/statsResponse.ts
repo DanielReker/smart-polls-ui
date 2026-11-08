@@ -9,6 +9,6 @@ import type { SingleChoiceQuestionStatsDto } from './singleChoiceQuestionStatsDt
 import type { TextQuestionStatsDto } from './textQuestionStatsDto';
 
 export interface StatsResponse {
-  submissionsCount: number;
   stats: (MultiChoiceQuestionStatsDto | SingleChoiceQuestionStatsDto | TextQuestionStatsDto)[];
+  submissionsCount: number;
 }

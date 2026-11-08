@@ -10,16 +10,16 @@ import type { SingleChoiceQuestionDto } from './singleChoiceQuestionDto';
 import type { TextQuestionDto } from './textQuestionDto';
 
 export interface PollResponse {
-  id: number;
   createdDate: string;
+  /** @nullable */
+  description?: string | null;
+  id: number;
+  mySubmissionsCount: number;
   /**
      * @minLength 0
      * @maxLength 255
      */
   name: string;
-  /** @nullable */
-  description?: string | null;
-  status: PollResponseStatus;
   questions: (MultiChoiceQuestionDto | SingleChoiceQuestionDto | TextQuestionDto)[];
-  mySubmissionsCount: number;
+  status: PollResponseStatus;
 }

@@ -112,129 +112,6 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       > => {
       return useMutation(getCreateUserMutationOptions(options), queryClient);
     }
-    export const login = (
-    userLogin: string,
-    loginRequest: LoginRequest,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
-
-
-      return customInstance<SessionResponse>(
-      {url: `/users/${userLogin}/sessions`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: loginRequest, signal
-    },
-      options);
-    }
-
-
-
-
-export const getLoginMutationKey = () => ['login'] as const;
-
-export const getLoginMutationOptions = <TError = ErrorDto,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof login>>, TError,LoginMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof login>>, TError,LoginMutationVariables, TContext> => {
-
-const mutationKey = getLoginMutationKey();
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof login>>, LoginMutationVariables> = (props) => {
-          const {userLogin,data} = props ?? {};
-
-          return  login(userLogin,data,requestOptions)
-        }
-
-
-
-
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type LoginMutationResult = NonNullable<Awaited<ReturnType<typeof login>>>
-    export type LoginMutationBody = LoginRequest
-    export type LoginMutationError = ErrorDto
-    export type LoginMutationVariables = {userLogin: string;data: LoginRequest}
-
-    export const useLogin = <TError = ErrorDto,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof login>>, TError,LoginMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof login>>,
-        TError,
-        LoginMutationVariables,
-        TContext
-      > => {
-      return useMutation(getLoginMutationOptions(options), queryClient);
-    }
-    export const updateCredentials = (
-    changeCredentialsRequest: ChangeCredentialsRequest,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
-
-
-      return customInstance<void>(
-      {url: `/users/me/credentials`, method: 'PATCH',
-      headers: {'Content-Type': 'application/json', },
-      data: changeCredentialsRequest, signal
-    },
-      options);
-    }
-
-
-
-
-export const getUpdateCredentialsMutationKey = () => ['updateCredentials'] as const;
-
-export const getUpdateCredentialsMutationOptions = <TError = ErrorDto,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateCredentials>>, TError,UpdateCredentialsMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof updateCredentials>>, TError,UpdateCredentialsMutationVariables, TContext> => {
-
-const mutationKey = getUpdateCredentialsMutationKey();
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateCredentials>>, UpdateCredentialsMutationVariables> = (props) => {
-          const {data} = props ?? {};
-
-          return  updateCredentials(data,requestOptions)
-        }
-
-
-
-
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type UpdateCredentialsMutationResult = NonNullable<Awaited<ReturnType<typeof updateCredentials>>>
-    export type UpdateCredentialsMutationBody = ChangeCredentialsRequest
-    export type UpdateCredentialsMutationError = ErrorDto
-    export type UpdateCredentialsMutationVariables = {data: ChangeCredentialsRequest}
-
-    export const useUpdateCredentials = <TError = ErrorDto,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateCredentials>>, TError,UpdateCredentialsMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof updateCredentials>>,
-        TError,
-        UpdateCredentialsMutationVariables,
-        TContext
-      > => {
-      return useMutation(getUpdateCredentialsMutationOptions(options), queryClient);
-    }
     export const getUserMe = (
 
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
@@ -320,7 +197,68 @@ export function useGetUserMe<TData = Awaited<ReturnType<typeof getUserMe>>, TErr
 
 
 
-export const logoutEverywhere = (
+export const updateCredentials = (
+    changeCredentialsRequest: ChangeCredentialsRequest,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+
+
+      return customInstance<void>(
+      {url: `/users/me/credentials`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: changeCredentialsRequest, signal
+    },
+      options);
+    }
+
+
+
+
+export const getUpdateCredentialsMutationKey = () => ['updateCredentials'] as const;
+
+export const getUpdateCredentialsMutationOptions = <TError = ErrorDto,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateCredentials>>, TError,UpdateCredentialsMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateCredentials>>, TError,UpdateCredentialsMutationVariables, TContext> => {
+
+const mutationKey = getUpdateCredentialsMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateCredentials>>, UpdateCredentialsMutationVariables> = (props) => {
+          const {data} = props ?? {};
+
+          return  updateCredentials(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateCredentialsMutationResult = NonNullable<Awaited<ReturnType<typeof updateCredentials>>>
+    export type UpdateCredentialsMutationBody = ChangeCredentialsRequest
+    export type UpdateCredentialsMutationError = ErrorDto
+    export type UpdateCredentialsMutationVariables = {data: ChangeCredentialsRequest}
+
+    export const useUpdateCredentials = <TError = ErrorDto,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateCredentials>>, TError,UpdateCredentialsMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateCredentials>>,
+        TError,
+        UpdateCredentialsMutationVariables,
+        TContext
+      > => {
+      return useMutation(getUpdateCredentialsMutationOptions(options), queryClient);
+    }
+    export const logoutEverywhere = (
 
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
@@ -437,4 +375,66 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
         TContext
       > => {
       return useMutation(getLogoutMutationOptions(options), queryClient);
+    }
+    export const login = (
+    userLogin: string,
+    loginRequest: LoginRequest,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+
+
+      return customInstance<SessionResponse>(
+      {url: `/users/${userLogin}/sessions`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: loginRequest, signal
+    },
+      options);
+    }
+
+
+
+
+export const getLoginMutationKey = () => ['login'] as const;
+
+export const getLoginMutationOptions = <TError = ErrorDto,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof login>>, TError,LoginMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof login>>, TError,LoginMutationVariables, TContext> => {
+
+const mutationKey = getLoginMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof login>>, LoginMutationVariables> = (props) => {
+          const {userLogin,data} = props ?? {};
+
+          return  login(userLogin,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type LoginMutationResult = NonNullable<Awaited<ReturnType<typeof login>>>
+    export type LoginMutationBody = LoginRequest
+    export type LoginMutationError = ErrorDto
+    export type LoginMutationVariables = {userLogin: string;data: LoginRequest}
+
+    export const useLogin = <TError = ErrorDto,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof login>>, TError,LoginMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof login>>,
+        TError,
+        LoginMutationVariables,
+        TContext
+      > => {
+      return useMutation(getLoginMutationOptions(options), queryClient);
     }

@@ -6,8 +6,8 @@
  */
 
 export interface AnswerDto {
+  dtype: string;
   /** @nullable */
   id?: number | null;
   questionId: number;
-  dtype: string;
 }

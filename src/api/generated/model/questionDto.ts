@@ -7,16 +7,16 @@
 
 export interface QuestionDto {
   /** @nullable */
+  description?: string | null;
+  dtype: string;
+  /** @nullable */
   id?: number | null;
+  isRequired: boolean;
   /**
      * @minLength 0
      * @maxLength 255
      */
   name: string;
-  /** @nullable */
-  description?: string | null;
-  isRequired: boolean;
   /** @minimum 0 */
   position: number;
-  dtype: string;
 }

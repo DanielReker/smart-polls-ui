@@ -8,8 +8,8 @@ import type { UserResponseRolesItem } from './userResponseRolesItem';
 
 export interface UserResponse {
   id: number;
+  isRegistered: boolean;
   /** @nullable */
   login?: string | null;
   roles: UserResponseRolesItem[];
-  isRegistered: boolean;
 }

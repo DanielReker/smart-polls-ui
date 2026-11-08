@@ -7,14 +7,14 @@
 import type { ShortPollResponseStatus } from './shortPollResponseStatus';
 
 export interface ShortPollResponse {
-  id: number;
   createdDate: string;
+  /** @nullable */
+  description?: string | null;
+  id: number;
   /**
      * @minLength 0
      * @maxLength 255
      */
   name: string;
-  /** @nullable */
-  description?: string | null;
   status: ShortPollResponseStatus;
 }

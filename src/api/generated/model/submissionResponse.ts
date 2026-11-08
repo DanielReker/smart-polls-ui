@@ -9,8 +9,8 @@ import type { SingleChoiceAnswerDto } from './singleChoiceAnswerDto';
 import type { TextAnswerDto } from './textAnswerDto';
 
 export interface SubmissionResponse {
+  answers: (MultiChoiceAnswerDto | SingleChoiceAnswerDto | TextAnswerDto)[];
+  createdDate: string;
   id: number;
   pollId: number;
-  createdDate: string;
-  answers: (MultiChoiceAnswerDto | SingleChoiceAnswerDto | TextAnswerDto)[];
 }
