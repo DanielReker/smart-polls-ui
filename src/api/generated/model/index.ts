@@ -7,6 +7,7 @@
 
 export * from './aiGenerateQuestionsRequest';
 export * from './answerDto';
+export * from './answerDtoVariant';
 export * from './changeCredentialsRequest';
 export * from './choiceDto';
 export * from './choiceStatsDto';
@@ -21,7 +22,9 @@ export * from './pollResponse';
 export * from './pollResponseStatus';
 export * from './pollsResponse';
 export * from './questionDto';
+export * from './questionDtoVariant';
 export * from './questionStatsDto';
+export * from './questionStatsDtoVariant';
 export * from './sessionResponse';
 export * from './shortPollResponse';
 export * from './shortPollResponseStatus';

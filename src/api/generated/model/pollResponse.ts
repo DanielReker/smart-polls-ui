@@ -4,10 +4,8 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { MultiChoiceQuestionDto } from './multiChoiceQuestionDto';
 import type { PollResponseStatus } from './pollResponseStatus';
-import type { SingleChoiceQuestionDto } from './singleChoiceQuestionDto';
-import type { TextQuestionDto } from './textQuestionDto';
+import type { QuestionDtoVariant } from './questionDtoVariant';
 
 export interface PollResponse {
   createdDate: string;
@@ -20,6 +18,6 @@ export interface PollResponse {
      * @maxLength 255
      */
   name: string;
-  questions: (MultiChoiceQuestionDto | SingleChoiceQuestionDto | TextQuestionDto)[];
+  questions: QuestionDtoVariant[];
   status: PollResponseStatus;
 }

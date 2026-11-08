@@ -588,6 +588,11 @@ components:
       required:
         - dtype
         - questionId
+    AnswerDtoVariant:
+      oneOf:
+        - $ref: "#/components/schemas/MultiChoiceAnswerDto"
+        - $ref: "#/components/schemas/SingleChoiceAnswerDto"
+        - $ref: "#/components/schemas/TextAnswerDto"
     ChangeCredentialsRequest:
       type: object
       properties:
@@ -708,10 +713,7 @@ components:
         questions:
           type: array
           items:
-            oneOf:
-              - $ref: "#/components/schemas/MultiChoiceQuestionDto"
-              - $ref: "#/components/schemas/SingleChoiceQuestionDto"
-              - $ref: "#/components/schemas/TextQuestionDto"
+            $ref: "#/components/schemas/QuestionDtoVariant"
       required:
         - questions
     PollResponse:
@@ -737,10 +739,7 @@ components:
         questions:
           type: array
           items:
-            oneOf:
-              - $ref: "#/components/schemas/MultiChoiceQuestionDto"
-              - $ref: "#/components/schemas/SingleChoiceQuestionDto"
-              - $ref: "#/components/schemas/TextQuestionDto"
+            $ref: "#/components/schemas/QuestionDtoVariant"
         status:
           type: string
           enum:
@@ -794,6 +793,11 @@ components:
         - isRequired
         - name
         - position
+    QuestionDtoVariant:
+      oneOf:
+        - $ref: "#/components/schemas/MultiChoiceQuestionDto"
+        - $ref: "#/components/schemas/SingleChoiceQuestionDto"
+        - $ref: "#/components/schemas/TextQuestionDto"
     QuestionStatsDto:
       type: object
       discriminator:
@@ -811,6 +815,11 @@ components:
         - answerCount
         - dtype
         - questionId
+    QuestionStatsDtoVariant:
+      oneOf:
+        - $ref: "#/components/schemas/MultiChoiceQuestionStatsDto"
+        - $ref: "#/components/schemas/SingleChoiceQuestionStatsDto"
+        - $ref: "#/components/schemas/TextQuestionStatsDto"
     SessionResponse:
       type: object
       properties:
@@ -890,10 +899,7 @@ components:
         stats:
           type: array
           items:
-            oneOf:
-              - $ref: "#/components/schemas/MultiChoiceQuestionStatsDto"
-              - $ref: "#/components/schemas/SingleChoiceQuestionStatsDto"
-              - $ref: "#/components/schemas/TextQuestionStatsDto"
+            $ref: "#/components/schemas/QuestionStatsDtoVariant"
         submissionsCount:
           type: integer
           format: int64
@@ -906,10 +912,7 @@ components:
         answers:
           type: array
           items:
-            oneOf:
-              - $ref: "#/components/schemas/MultiChoiceAnswerDto"
-              - $ref: "#/components/schemas/SingleChoiceAnswerDto"
-              - $ref: "#/components/schemas/TextAnswerDto"
+            $ref: "#/components/schemas/AnswerDtoVariant"
       required:
         - answers
     SubmissionResponse:
@@ -918,10 +921,7 @@ components:
         answers:
           type: array
           items:
-            oneOf:
-              - $ref: "#/components/schemas/MultiChoiceAnswerDto"
-              - $ref: "#/components/schemas/SingleChoiceAnswerDto"
-              - $ref: "#/components/schemas/TextAnswerDto"
+            $ref: "#/components/schemas/AnswerDtoVariant"
         createdDate:
           type: string
           format: date-time

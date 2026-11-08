@@ -4,10 +4,8 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { MultiChoiceQuestionDto } from './multiChoiceQuestionDto';
-import type { SingleChoiceQuestionDto } from './singleChoiceQuestionDto';
-import type { TextQuestionDto } from './textQuestionDto';
+import type { QuestionDtoVariant } from './questionDtoVariant';
 
 export interface PollQuestionsUpsertRequest {
-  questions: (MultiChoiceQuestionDto | SingleChoiceQuestionDto | TextQuestionDto)[];
+  questions: QuestionDtoVariant[];
 }

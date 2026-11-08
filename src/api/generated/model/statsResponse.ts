@@ -4,11 +4,9 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { MultiChoiceQuestionStatsDto } from './multiChoiceQuestionStatsDto';
-import type { SingleChoiceQuestionStatsDto } from './singleChoiceQuestionStatsDto';
-import type { TextQuestionStatsDto } from './textQuestionStatsDto';
+import type { QuestionStatsDtoVariant } from './questionStatsDtoVariant';
 
 export interface StatsResponse {
-  stats: (MultiChoiceQuestionStatsDto | SingleChoiceQuestionStatsDto | TextQuestionStatsDto)[];
+  stats: QuestionStatsDtoVariant[];
   submissionsCount: number;
 }

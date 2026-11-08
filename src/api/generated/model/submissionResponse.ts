@@ -4,12 +4,10 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { MultiChoiceAnswerDto } from './multiChoiceAnswerDto';
-import type { SingleChoiceAnswerDto } from './singleChoiceAnswerDto';
-import type { TextAnswerDto } from './textAnswerDto';
+import type { AnswerDtoVariant } from './answerDtoVariant';
 
 export interface SubmissionResponse {
-  answers: (MultiChoiceAnswerDto | SingleChoiceAnswerDto | TextAnswerDto)[];
+  answers: AnswerDtoVariant[];
   createdDate: string;
   id: number;
   pollId: number;
