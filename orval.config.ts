@@ -2,11 +2,11 @@ import { defineConfig } from 'orval';
 
 export default defineConfig({
     'smart-poll-api': {
-        input: './api-docs.yaml',
+        input: './src/api/api-docs.yaml',
         output: {
             mode: 'tags-split',
             target: 'src/api/generated',
-            schemas: 'src/api/model',
+            schemas: 'src/api/generated/model',
             client: 'react-query',
             httpClient: 'axios',
             baseUrl: '',

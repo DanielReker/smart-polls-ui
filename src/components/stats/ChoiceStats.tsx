@@ -1,4 +1,4 @@
-import type {MultiChoiceQuestionStatsDto, SingleChoiceQuestionStatsDto} from "../../api/model";
+import type {MultiChoiceQuestionStatsDto, SingleChoiceQuestionStatsDto} from "../../api/generated/model";
 import {Box, Card, CardContent, Divider, LinearProgress, Stack, Typography} from "@mui/material";
 
 export const ChoiceStats = ({stats, title, questionData}: {

@@ -4,8 +4,8 @@ import {Alert, Box, Button, Card, CircularProgress, Container, Typography} from 
 import SendIcon from '@mui/icons-material/Send';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import {Link, useNavigate, useParams} from "react-router";
-import {useCreateSubmission, useGetPoll} from "../api/generated/poll-controller/poll-controller.ts";
-import type {SubmissionCreateRequest} from "../api/model";
+import {useCreateSubmission, useGetPoll} from "../api/generated";
+import type {SubmissionCreateRequest} from "../api/generated/model";
 import {QuestionInputFactory} from "../components/questions/QuestionInputFactory.tsx";
 import {useAuth} from "../auth/AuthContext.tsx";
 

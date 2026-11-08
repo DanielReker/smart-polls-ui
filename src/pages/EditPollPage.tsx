@@ -25,8 +25,8 @@ import {
     useGetPoll,
     useStartPoll,
     useUpsertQuestions
-} from "../api/generated/poll-controller/poll-controller.ts";
-import {type PollQuestionsUpsertRequest, type PollResponse, PollResponseStatus} from "../api/model";
+} from "../api/generated";
+import {type PollQuestionsUpsertRequest, type PollResponse, PollResponseStatus} from "../api/generated/model";
 import {QuestionCard} from "../components/questions/QuestionCard.tsx";
 import PollStatus from "../components/PollStatus.tsx";
 import {PollNavigation} from "../components/PollNavigation.tsx";

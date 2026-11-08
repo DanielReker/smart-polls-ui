@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { TextField, Button, Box, Typography } from '@mui/material';
-import {useCreatePoll} from "../api/generated/poll-controller/poll-controller.ts";
+import {useCreatePoll} from "../api/generated";
 import {useNavigate} from "react-router";
 
 export const CreatePollPage = () => {

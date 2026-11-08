@@ -1,4 +1,4 @@
-import type {TextQuestionStatsDto} from "../../api/model";
+import type {TextQuestionStatsDto} from "../../api/generated/model";
 import {Box, Card, CardContent, Divider, Typography} from "@mui/material";
 
 export const TextStats = ({stats, title}: {

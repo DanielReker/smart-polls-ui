@@ -6,7 +6,7 @@ import {
     useLogin,
     useLogout,
     useUpdateCredentials
-} from "../api/generated/user-controller/user-controller.ts";
+} from "../api/generated";
 import {AuthContext} from "./AuthContext.tsx";
 import {useQueryClient} from "@tanstack/react-query";
 

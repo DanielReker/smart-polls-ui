@@ -33,7 +33,7 @@ import type {
   StatsResponse,
   SubmissionCreateRequest,
   SubmissionResponse
-} from '../../model';
+} from '../model';
 
 import { customInstance } from '../../axios';
 

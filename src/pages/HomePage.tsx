@@ -1,6 +1,6 @@
 import {Box, Button, List, ListItem, ListItemText, Paper, Typography} from '@mui/material';
 import {Link} from "react-router";
-import {useGetMyPolls} from "../api/generated/poll-controller/poll-controller.ts";
+import {useGetMyPolls} from "../api/generated";
 import PollStatus from "../components/PollStatus.tsx";
 
 export const HomePage = () => {

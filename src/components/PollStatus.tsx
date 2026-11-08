@@ -1,5 +1,5 @@
 import {Box} from "@mui/material";
-import type {PollResponseStatus} from "../api/model";
+import type {PollResponseStatus} from "../api/generated/model";
 
 interface PollStatusProps {
     status: PollResponseStatus;

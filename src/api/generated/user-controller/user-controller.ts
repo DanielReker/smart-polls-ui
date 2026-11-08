@@ -29,7 +29,7 @@ import type {
   LoginRequest,
   SessionResponse,
   UserResponse
-} from '../../model';
+} from '../model';
 
 import { customInstance } from '../../axios';
 

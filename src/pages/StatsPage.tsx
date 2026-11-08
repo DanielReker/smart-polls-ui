@@ -1,11 +1,11 @@
 import {Box, Button, Chip, Container, Grid, Skeleton, Stack, Typography} from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import PersonIcon from '@mui/icons-material/Person';
-import {useGetPoll, useGetStats} from "../api/generated/poll-controller/poll-controller.ts";
+import {useGetPoll, useGetStats} from "../api/generated";
 import {Link, useParams} from "react-router";
 import {TextStats} from "../components/stats/TextStats.tsx";
 import {ChoiceStats} from "../components/stats/ChoiceStats.tsx";
-import {PollResponseStatus} from "../api/model";
+import {PollResponseStatus} from "../api/generated/model";
 
 
 export const StatsPage = () => {
