@@ -5,13 +5,13 @@ import SendIcon from '@mui/icons-material/Send';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import {Link, useNavigate, useParams} from "react-router";
 import {useCreateSubmission, useGetPoll} from "../api/generated";
-import type {SubmissionCreateRequest} from "../api/generated/model";
+import type {QuestionDtoVariant, SubmissionCreateRequest} from "../api/generated/model";
 import {QuestionInputFactory} from "../components/questions/QuestionInputFactory.tsx";
 import {useAuth} from "../auth/AuthContext.tsx";
 
 
-export type FormValues = {
-    [questionId: number]: any;
+export type SubmissionFormValues = {
+    [questionId: string]: string | number[];
 };
 
 export const TakePollPage = () => {
@@ -26,47 +26,49 @@ export const TakePollPage = () => {
     const { data: poll, isLoading, error } = useGetPoll(id);
     const { mutateAsync: submitPoll, isPending: isSubmitting } = useCreateSubmission();
 
-    const { control, handleSubmit } = useForm<FormValues>();
+    const { control, handleSubmit } = useForm<SubmissionFormValues>();
 
-    const onSubmit = async (data: FormValues) => {
+    const onSubmit = async (data: SubmissionFormValues) => {
         if (!poll?.questions) return;
 
-        const answersToSend: any[] = [];
+        const request: SubmissionCreateRequest = {
+            answers: []
+        };
 
-        poll.questions.forEach((q: any) => {
-            const value = data[q.id];
+        poll.questions.forEach((question) => {
+            if (!question.id) {
+                throw new Error("Question ID can't be null")
+            }
+
+            const value = data[String(question.id)];
 
             if (value === undefined || value === '' || (Array.isArray(value) && value.length === 0)) {
                 return;
             }
 
-            if (q.dtype === 'text') {
-                answersToSend.push({
+            if (question.dtype === 'text') {
+                request.answers.push({
                     dtype: 'text',
-                    questionId: q.id,
-                    value: value
+                    questionId: question.id,
+                    value: value as string
                 });
-            } else if (q.dtype === 'single-choice') {
-                answersToSend.push({
+            } else if (question.dtype === 'single-choice') {
+                request.answers.push({
                     dtype: 'single-choice',
-                    questionId: q.id,
-                    selectedChoiceId: Number(value)
+                    questionId: question.id,
+                    selectedChoiceId: Number(value as string)
                 });
-            } else if (q.dtype === 'multi-choice') {
-                answersToSend.push({
+            } else if (question.dtype === 'multi-choice') {
+                request.answers.push({
                     dtype: 'multi-choice',
-                    questionId: q.id,
-                    selectedChoiceIds: value
+                    questionId: question.id,
+                    selectedChoiceIds: value as number[]
                 });
             }
         });
 
-        const payload: SubmissionCreateRequest = {
-            answers: answersToSend
-        };
-
         try {
-            await submitPoll({ pollId: id, data: payload });
+            await submitPoll({ pollId: id, data: request });
             setIsSuccess(true);
         } catch (e) {
             console.error(e);
@@ -120,7 +122,8 @@ export const TakePollPage = () => {
         );
     }
 
-    const sortedQuestions = [...(poll.questions || [])].sort((a: any, b: any) => a.position - b.position);
+    const sortedQuestions = [...(poll.questions || [])]
+        .sort((a, b) => a.position - b.position);
 
     return (
         <Container maxWidth="md" sx={{ py: 4 }}>
@@ -132,10 +135,10 @@ export const TakePollPage = () => {
             </Box>
 
             <form onSubmit={handleSubmit(onSubmit)}>
-                {sortedQuestions.map((q: any) => (
+                {sortedQuestions.map((question: QuestionDtoVariant) => (
                     <QuestionInputFactory
-                        key={q.id}
-                        question={q}
+                        key={question.id}
+                        question={question}
                         control={control}
                     />
                 ))}

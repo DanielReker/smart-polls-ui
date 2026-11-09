@@ -22,7 +22,7 @@ export const StatsPage = () => {
     const { data: pollData } = useGetPoll(id);
 
     const getQuestionTitle = (qId: number) => {
-        return pollData?.questions?.find((q: any) => q.id === qId)?.name || `Вопрос №${qId}`;
+        return pollData?.questions?.find((q) => q.id === qId)?.name || `Вопрос №${qId}`;
     };
 
     if (isLoading && !statsData) {
@@ -72,24 +72,28 @@ export const StatsPage = () => {
 
             <Container>
                 <Grid container spacing={3}>
-                    {statsData.stats.map((statItem: any) => {
+                    {statsData.stats.map((statItem) => {
                         const title = getQuestionTitle(statItem.questionId);
-                        const type = statItem.dtype;
 
                         const questionData = (pollData
                                 ?.questions
                                 ?.find(question =>
-                                    question.id == statItem.questionId))
-                            || null;
+                                    question.id == statItem.questionId));
+
+                        if (!questionData) {
+                            throw new Error(`Couldn't find question with id = ${statItem.questionId}`)
+                        }
 
                         return (
                             <Grid size={{ xs: 12, md: 6 }} key={statItem.questionId}>
-                                {type === 'text' ? (
+                                {statItem.dtype === 'text' && (
                                     <TextStats
                                         stats={statItem}
                                         title={title}
                                     />
-                                ) : (
+                                )}
+                                {((statItem.dtype === 'single-choice' && questionData.dtype === 'single-choice') ||
+                                    (statItem.dtype === 'multi-choice' && questionData.dtype === 'multi-choice')) && (
                                     <ChoiceStats
                                         stats={statItem}
                                         title={title}

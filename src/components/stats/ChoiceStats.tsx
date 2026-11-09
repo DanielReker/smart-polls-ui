@@ -1,10 +1,15 @@
-import type {MultiChoiceQuestionStatsDto, SingleChoiceQuestionStatsDto} from "../../api/generated/model";
+import type {
+    MultiChoiceQuestionDto,
+    MultiChoiceQuestionStatsDto,
+    SingleChoiceQuestionDto,
+    SingleChoiceQuestionStatsDto
+} from "../../api/generated/model";
 import {Box, Card, CardContent, Divider, LinearProgress, Stack, Typography} from "@mui/material";
 
 export const ChoiceStats = ({stats, title, questionData}: {
     stats: SingleChoiceQuestionStatsDto | MultiChoiceQuestionStatsDto;
     title: string,
-    questionData: any
+    questionData: SingleChoiceQuestionDto | MultiChoiceQuestionDto
 }) => {
     const totalAnswers = stats.answerCount || 0;
 
@@ -27,10 +32,11 @@ export const ChoiceStats = ({stats, title, questionData}: {
                             <Box key={choice.id}>
                                 <Box display="flex" justifyContent="space-between" gap={4} mb={0.5}>
                                     <Typography variant="body2" sx={{fontWeight: 500}}>
-                                        {questionData?.possibleChoices.find((c: {
-                                                id: number | undefined;
-                                            }) => c.id === choice.id)?.name ||
-                                            `Вариант №${choice.id}`}
+                                        {questionData
+                                                ?.possibleChoices
+                                                .find(c => c.id === choice.id)
+                                                ?.name
+                                            || `Вариант №${choice.id}`}
                                     </Typography>
                                     <Typography variant="body2" color="text.secondary">
                                         {choice.count} ({percent}%)

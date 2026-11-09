@@ -3,6 +3,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import HowToVoteIcon from '@mui/icons-material/HowToVote';
 import {matchPath, useLocation, useNavigate} from "react-router";
+import type {SyntheticEvent} from "react";
 
 interface PollNavigationProps {
     pollId: number;
@@ -20,7 +21,7 @@ export const PollNavigation = ({ pollId, status }: PollNavigationProps) => {
     else if (matchPath('/polls/:id/stats', location.pathname)) currentTab = 'stats';
     else if (matchPath('/polls/:id', location.pathname)) currentTab = 'take';
 
-    const handleChange = (_: React.SyntheticEvent, newValue: string) => {
+    const handleChange = (_: SyntheticEvent, newValue: string) => {
         if (newValue === 'edit') navigate(`/polls/${pollId}/edit`);
         else if (newValue === 'stats') navigate(`/polls/${pollId}/stats`);
         else if (newValue === 'take') navigate(`/polls/${pollId}`);

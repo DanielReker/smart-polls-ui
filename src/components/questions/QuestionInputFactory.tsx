@@ -11,10 +11,12 @@ import {
     TextField,
     Typography
 } from "@mui/material";
+import type {SubmissionFormValues} from "../../pages/TakePollPage.tsx";
+import type {QuestionDtoVariant} from "../../api/generated/model";
 
 interface InputFactoryProps {
-    question: any;
-    control: Control<any>;
+    question: QuestionDtoVariant;
+    control: Control<SubmissionFormValues>;
 }
 
 export const QuestionInputFactory = ({question, control}: InputFactoryProps) => {
@@ -63,11 +65,14 @@ export const QuestionInputFactory = ({question, control}: InputFactoryProps) => 
                         rules={rules}
                         render={({field, fieldState}) => (
                             <>
-                                <RadioGroup {...field}>
-                                    {question.possibleChoices?.map((opt: any) => (
+                                <RadioGroup
+                                    {...field}
+                                    value={field.value ?? ""}
+                                >
+                                    {question.possibleChoices?.map((opt) => (
                                         <FormControlLabel
-                                            key={opt.id}
-                                            value={opt.id}
+                                            key={opt.id!}
+                                            value={opt.id!}
                                             control={<Radio/>}
                                             label={opt.name}
                                         />
@@ -86,7 +91,7 @@ export const QuestionInputFactory = ({question, control}: InputFactoryProps) => 
                         name={String(id)}
                         control={control}
                         rules={{
-                            validate: (value: any) => {
+                            validate: (value) => {
                                 if (isRequired && (!value || value.length === 0)) {
                                     return 'Выберите как минимум 1 вариант';
                                 }
@@ -107,16 +112,16 @@ export const QuestionInputFactory = ({question, control}: InputFactoryProps) => 
 
                             return (
                                 <FormGroup>
-                                    {question.possibleChoices?.map((opt: any) => (
+                                    {question.possibleChoices?.map((choice) => (
                                         <FormControlLabel
-                                            key={opt.id}
+                                            key={choice.id}
                                             control={
                                                 <Checkbox
-                                                    checked={selectedIds.includes(opt.id)}
-                                                    onChange={() => handleToggle(opt.id)}
+                                                    checked={selectedIds.includes(choice.id!)}
+                                                    onChange={() => handleToggle(choice.id!)}
                                                 />
                                             }
-                                            label={opt.name}
+                                            label={choice.name}
                                         />
                                     ))}
                                     {fieldState.error && (

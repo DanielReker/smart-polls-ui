@@ -19,8 +19,8 @@ export const HomePage = () => {
             ) : (
                 <List sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
                     {myPolls?.polls?.map((poll) => (
-                        <Paper>
-                            <ListItem key={poll.id} divider>
+                        <Paper key={poll.id}>
+                            <ListItem divider>
                                 <ListItemText
                                     primary={<Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                                         {`${poll.name || 'Poll'} #${poll.id}`}

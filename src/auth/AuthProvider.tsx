@@ -40,7 +40,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             }
         };
 
-        initSession();
+        void initSession();
     }, [token, createUser]);
 
     const logout = async () => {

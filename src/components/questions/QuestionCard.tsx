@@ -15,11 +15,12 @@ import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {type Control, Controller} from "react-hook-form";
 import {ChoiceOptionsEditor} from "./ChoiceOptionsEditor.tsx";
+import type {PollQuestionsUpsertRequest, QuestionDtoVariant} from "../../api/generated/model";
 
 interface QuestionCardProps {
     index: number;
-    field: any;
-    control: Control<any>;
+    field: QuestionDtoVariant;
+    control: Control<PollQuestionsUpsertRequest>;
     remove: (index: number) => void;
     move: (from: number, to: number) => void;
     isFirst: boolean;
@@ -92,6 +93,7 @@ export const QuestionCard = ({index, field, control, remove, move, isFirst, isLa
                         render={({field, fieldState}) => (
                             <TextField
                                 {...field}
+                                value={field.value ?? ""}
                                 label="Описание вопроса"
                                 fullWidth
                                 error={!!fieldState.error}
@@ -118,7 +120,13 @@ export const QuestionCard = ({index, field, control, remove, move, isFirst, isLa
                             name={`questions.${index}.maxLength`}
                             control={control}
                             render={({field}) => (
-                                <TextField {...field} label="Максимальная длина ответа" type="number" sx={{width: 200}}/>
+                                <TextField
+                                    {...field}
+                                    value={field.value ?? 100} // TODO: Define default values instead
+                                    label="Максимальная длина ответа"
+                                    type="number"
+                                    sx={{width: 200}}
+                                />
                             )}
                         />
                     )}

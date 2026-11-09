@@ -93,7 +93,8 @@ export const EditPollPage = () => {
 
     const { fields, append, remove, move } = useFieldArray({
         control,
-        name: "questions"
+        name: "questions",
+        keyName: 'fieldId'
     });
 
     useEffect(() => {
@@ -227,7 +228,7 @@ export const EditPollPage = () => {
                     <form onSubmit={handleSubmit(onManualSave)}>
                         {fields.map((field, index) => (
                             <QuestionCard
-                                key={field.id}
+                                key={field.fieldId}
                                 index={index}
                                 field={field}
                                 control={control}

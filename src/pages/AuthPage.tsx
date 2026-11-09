@@ -3,8 +3,14 @@ import {useForm} from 'react-hook-form';
 import {Alert, Box, Button, Card, CardContent, Container, Tab, Tabs, TextField, Typography} from '@mui/material';
 import {useAuth} from "../auth/AuthContext.tsx";
 import {useLocation, useNavigate} from "react-router";
+import {isAxiosError} from "axios";
 
 type AuthMode = 'login' | 'register';
+
+interface AuthFormValues {
+    login: string;
+    password: string;
+}
 
 export const AuthPage = () => {
     const { login, register } = useAuth();
@@ -17,11 +23,11 @@ export const AuthPage = () => {
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
 
-    const { register: formRegister, handleSubmit, formState: { errors } } = useForm({
+    const { register: formRegister, handleSubmit, formState: { errors } } = useForm<AuthFormValues>({
         defaultValues: { login: '', password: '' }
     });
 
-    const onSubmit = async (data: any) => {
+    const onSubmit = async (data: AuthFormValues) => {
         setError(null);
         setIsLoading(true);
         try {
@@ -31,13 +37,17 @@ export const AuthPage = () => {
                 await login(data.login, data.password);
             }
             navigate(from, { replace: true });
-        } catch (e: any) {
-            if (e.response?.status === 401 || e.response?.status === 404) {
-                setError('Неверный логин или пароль');
-            } else if (e.response?.status === 409) {
-                setError('Логин уже занят другим пользователем');
+        } catch (error) {
+            if (isAxiosError(error)) {
+                if (error.response?.status === 401 || error.response?.status === 404) {
+                    setError('Неверный логин или пароль');
+                } else if (error.response?.status === 409) {
+                    setError('Логин уже занят другим пользователем');
+                } else {
+                    setError('Ошибка сервера, пожалуйста, попробуйте позже');
+                }
             } else {
-                setError('Ошибка сервера, пожалуйста, попробуйте позже');
+                setError('Неизвестная ошибка');
             }
         } finally {
             setIsLoading(false);
