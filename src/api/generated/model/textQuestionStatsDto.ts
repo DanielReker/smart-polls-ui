@@ -5,5 +5,8 @@
  * OpenAPI spec version: v0
  */
 import type { QuestionStatsDto } from './questionStatsDto';
+import type { TextQuestionStatsDtoDtype } from './textQuestionStatsDtoDtype';
 
-export type TextQuestionStatsDto = QuestionStatsDto;
+export type TextQuestionStatsDto = Omit<QuestionStatsDto, 'dtype'> & {
+  dtype: TextQuestionStatsDtoDtype;
+};

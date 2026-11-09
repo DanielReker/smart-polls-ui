@@ -5,8 +5,10 @@
  * OpenAPI spec version: v0
  */
 import type { QuestionDto } from './questionDto';
+import type { TextQuestionDtoDtype } from './textQuestionDtoDtype';
 
-export type TextQuestionDto = QuestionDto & ({
+export type TextQuestionDto = Omit<QuestionDto, 'dtype'> & ({
+  dtype: TextQuestionDtoDtype;
   /** @nullable */
   maxLength?: number | null;
 });

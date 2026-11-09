@@ -5,8 +5,10 @@
  * OpenAPI spec version: v0
  */
 import type { ChoiceStatsDto } from './choiceStatsDto';
+import type { MultiChoiceQuestionStatsDtoDtype } from './multiChoiceQuestionStatsDtoDtype';
 import type { QuestionStatsDto } from './questionStatsDto';
 
-export type MultiChoiceQuestionStatsDto = QuestionStatsDto & {
+export type MultiChoiceQuestionStatsDto = Omit<QuestionStatsDto, 'dtype'> & {
+  dtype: MultiChoiceQuestionStatsDtoDtype;
   choiceStats: ChoiceStatsDto[];
 };

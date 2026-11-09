@@ -5,7 +5,9 @@
  * OpenAPI spec version: v0
  */
 import type { AnswerDto } from './answerDto';
+import type { SingleChoiceAnswerDtoDtype } from './singleChoiceAnswerDtoDtype';
 
-export type SingleChoiceAnswerDto = AnswerDto & {
+export type SingleChoiceAnswerDto = Omit<AnswerDto, 'dtype'> & {
+  dtype: SingleChoiceAnswerDtoDtype;
   selectedChoiceId: number;
 };

@@ -573,6 +573,10 @@ components:
     AnswerDto:
       type: object
       discriminator:
+        mapping:
+          multi-choice: "#/components/schemas/MultiChoiceAnswerDto"
+          single-choice: "#/components/schemas/SingleChoiceAnswerDto"
+          text: "#/components/schemas/TextAnswerDto"
         propertyName: dtype
       properties:
         dtype:
@@ -765,6 +769,10 @@ components:
     QuestionDto:
       type: object
       discriminator:
+        mapping:
+          multi-choice: "#/components/schemas/MultiChoiceQuestionDto"
+          single-choice: "#/components/schemas/SingleChoiceQuestionDto"
+          text: "#/components/schemas/TextQuestionDto"
         propertyName: dtype
       properties:
         description:
@@ -801,6 +809,10 @@ components:
     QuestionStatsDto:
       type: object
       discriminator:
+        mapping:
+          multi-choice: "#/components/schemas/MultiChoiceQuestionStatsDto"
+          single-choice: "#/components/schemas/SingleChoiceQuestionStatsDto"
+          text: "#/components/schemas/TextQuestionStatsDto"
         propertyName: dtype
       properties:
         answerCount:

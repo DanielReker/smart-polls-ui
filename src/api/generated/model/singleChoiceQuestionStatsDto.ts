@@ -6,7 +6,9 @@
  */
 import type { ChoiceStatsDto } from './choiceStatsDto';
 import type { QuestionStatsDto } from './questionStatsDto';
+import type { SingleChoiceQuestionStatsDtoDtype } from './singleChoiceQuestionStatsDtoDtype';
 
-export type SingleChoiceQuestionStatsDto = QuestionStatsDto & {
+export type SingleChoiceQuestionStatsDto = Omit<QuestionStatsDto, 'dtype'> & {
+  dtype: SingleChoiceQuestionStatsDtoDtype;
   choiceStats: ChoiceStatsDto[];
 };

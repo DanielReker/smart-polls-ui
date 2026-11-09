@@ -5,7 +5,9 @@
  * OpenAPI spec version: v0
  */
 import type { AnswerDto } from './answerDto';
+import type { TextAnswerDtoDtype } from './textAnswerDtoDtype';
 
-export type TextAnswerDto = AnswerDto & {
+export type TextAnswerDto = Omit<AnswerDto, 'dtype'> & {
+  dtype: TextAnswerDtoDtype;
   value: string;
 };
