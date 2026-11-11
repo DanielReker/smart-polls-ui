@@ -6,7 +6,7 @@ import {matchPath, useLocation, useNavigate} from "react-router";
 import type {SyntheticEvent} from "react";
 
 interface PollNavigationProps {
-    pollId: number;
+    pollId: string;
     status?: 'DRAFT' | 'ACTIVE' | 'FINISHED';
 }
 

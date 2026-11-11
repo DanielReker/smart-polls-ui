@@ -9,5 +9,5 @@ import type { SingleChoiceAnswerDtoDtype } from './singleChoiceAnswerDtoDtype';
 
 export type SingleChoiceAnswerDto = Omit<AnswerDto, 'dtype'> & {
   dtype: SingleChoiceAnswerDtoDtype;
-  selectedChoiceId: number;
+  selectedChoiceId: string;
 };

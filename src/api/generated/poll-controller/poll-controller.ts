@@ -204,7 +204,7 @@ export function useGetMyPolls<TData = Awaited<ReturnType<typeof getMyPolls>>, TE
 
 
 export const getPoll = (
-    pollId: number,
+    pollId: string,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
 
@@ -218,14 +218,14 @@ export const getPoll = (
 
 
 
-export const getGetPollQueryKey = (pollId: number,) => {
+export const getGetPollQueryKey = (pollId: string,) => {
     return [
     `/polls/${pollId}`
     ] as const;
     }
 
 
-export const getGetPollQueryOptions = <TData = Awaited<ReturnType<typeof getPoll>>, TError = ErrorDto>(pollId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPoll>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetPollQueryOptions = <TData = Awaited<ReturnType<typeof getPoll>>, TError = ErrorDto>(pollId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPoll>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -248,7 +248,7 @@ export type GetPollQueryError = ErrorDto
 
 
 export function useGetPoll<TData = Awaited<ReturnType<typeof getPoll>>, TError = ErrorDto>(
- pollId: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPoll>>, TError, TData>> & Pick<
+ pollId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPoll>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getPoll>>,
           TError,
@@ -258,7 +258,7 @@ export function useGetPoll<TData = Awaited<ReturnType<typeof getPoll>>, TError =
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetPoll<TData = Awaited<ReturnType<typeof getPoll>>, TError = ErrorDto>(
- pollId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPoll>>, TError, TData>> & Pick<
+ pollId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPoll>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getPoll>>,
           TError,
@@ -268,11 +268,11 @@ export function useGetPoll<TData = Awaited<ReturnType<typeof getPoll>>, TError =
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetPoll<TData = Awaited<ReturnType<typeof getPoll>>, TError = ErrorDto>(
- pollId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPoll>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ pollId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPoll>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetPoll<TData = Awaited<ReturnType<typeof getPoll>>, TError = ErrorDto>(
- pollId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPoll>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ pollId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPoll>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -289,7 +289,7 @@ export function useGetPoll<TData = Awaited<ReturnType<typeof getPoll>>, TError =
 
 
 export const upsertQuestions = (
-    pollId: number,
+    pollId: string,
     pollQuestionsUpsertRequest: PollQuestionsUpsertRequest,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
@@ -338,7 +338,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
     export type UpsertQuestionsMutationResult = NonNullable<Awaited<ReturnType<typeof upsertQuestions>>>
     export type UpsertQuestionsMutationBody = PollQuestionsUpsertRequest
     export type UpsertQuestionsMutationError = ErrorDto
-    export type UpsertQuestionsMutationVariables = {pollId: number;data: PollQuestionsUpsertRequest}
+    export type UpsertQuestionsMutationVariables = {pollId: string;data: PollQuestionsUpsertRequest}
 
     export const useUpsertQuestions = <TError = ErrorDto,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof upsertQuestions>>, TError,UpsertQuestionsMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
@@ -351,7 +351,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       return useMutation(getUpsertQuestionsMutationOptions(options), queryClient);
     }
     export const aiGenerateQuestions = (
-    pollId: number,
+    pollId: string,
     aiGenerateQuestionsRequest: AiGenerateQuestionsRequest,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
@@ -400,7 +400,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
     export type AiGenerateQuestionsMutationResult = NonNullable<Awaited<ReturnType<typeof aiGenerateQuestions>>>
     export type AiGenerateQuestionsMutationBody = AiGenerateQuestionsRequest
     export type AiGenerateQuestionsMutationError = ErrorDto
-    export type AiGenerateQuestionsMutationVariables = {pollId: number;data: AiGenerateQuestionsRequest}
+    export type AiGenerateQuestionsMutationVariables = {pollId: string;data: AiGenerateQuestionsRequest}
 
     export const useAiGenerateQuestions = <TError = ErrorDto,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof aiGenerateQuestions>>, TError,AiGenerateQuestionsMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
@@ -413,7 +413,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       return useMutation(getAiGenerateQuestionsMutationOptions(options), queryClient);
     }
     export const finishPoll = (
-    pollId: number,
+    pollId: string,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
 
@@ -459,7 +459,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
     export type FinishPollMutationResult = NonNullable<Awaited<ReturnType<typeof finishPoll>>>
 
     export type FinishPollMutationError = ErrorDto
-    export type FinishPollMutationVariables = {pollId: number}
+    export type FinishPollMutationVariables = {pollId: string}
 
     export const useFinishPoll = <TError = ErrorDto,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof finishPoll>>, TError,FinishPollMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
@@ -472,7 +472,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       return useMutation(getFinishPollMutationOptions(options), queryClient);
     }
     export const startPoll = (
-    pollId: number,
+    pollId: string,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
 
@@ -518,7 +518,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
     export type StartPollMutationResult = NonNullable<Awaited<ReturnType<typeof startPoll>>>
 
     export type StartPollMutationError = ErrorDto
-    export type StartPollMutationVariables = {pollId: number}
+    export type StartPollMutationVariables = {pollId: string}
 
     export const useStartPoll = <TError = ErrorDto,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof startPoll>>, TError,StartPollMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
@@ -531,7 +531,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       return useMutation(getStartPollMutationOptions(options), queryClient);
     }
     export const getStats = (
-    pollId: number,
+    pollId: string,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
 
@@ -545,14 +545,14 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
 
-export const getGetStatsQueryKey = (pollId: number,) => {
+export const getGetStatsQueryKey = (pollId: string,) => {
     return [
     `/polls/${pollId}/stats`
     ] as const;
     }
 
 
-export const getGetStatsQueryOptions = <TData = Awaited<ReturnType<typeof getStats>>, TError = ErrorDto>(pollId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getStats>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetStatsQueryOptions = <TData = Awaited<ReturnType<typeof getStats>>, TError = ErrorDto>(pollId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getStats>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -575,7 +575,7 @@ export type GetStatsQueryError = ErrorDto
 
 
 export function useGetStats<TData = Awaited<ReturnType<typeof getStats>>, TError = ErrorDto>(
- pollId: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getStats>>, TError, TData>> & Pick<
+ pollId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getStats>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getStats>>,
           TError,
@@ -585,7 +585,7 @@ export function useGetStats<TData = Awaited<ReturnType<typeof getStats>>, TError
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetStats<TData = Awaited<ReturnType<typeof getStats>>, TError = ErrorDto>(
- pollId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getStats>>, TError, TData>> & Pick<
+ pollId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getStats>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getStats>>,
           TError,
@@ -595,11 +595,11 @@ export function useGetStats<TData = Awaited<ReturnType<typeof getStats>>, TError
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetStats<TData = Awaited<ReturnType<typeof getStats>>, TError = ErrorDto>(
- pollId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getStats>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ pollId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getStats>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetStats<TData = Awaited<ReturnType<typeof getStats>>, TError = ErrorDto>(
- pollId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getStats>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ pollId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getStats>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -616,7 +616,7 @@ export function useGetStats<TData = Awaited<ReturnType<typeof getStats>>, TError
 
 
 export const createSubmission = (
-    pollId: number,
+    pollId: string,
     submissionCreateRequest: SubmissionCreateRequest,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
@@ -665,7 +665,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
     export type CreateSubmissionMutationResult = NonNullable<Awaited<ReturnType<typeof createSubmission>>>
     export type CreateSubmissionMutationBody = SubmissionCreateRequest
     export type CreateSubmissionMutationError = ErrorDto
-    export type CreateSubmissionMutationVariables = {pollId: number;data: SubmissionCreateRequest}
+    export type CreateSubmissionMutationVariables = {pollId: string;data: SubmissionCreateRequest}
 
     export const useCreateSubmission = <TError = ErrorDto,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createSubmission>>, TError,CreateSubmissionMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}

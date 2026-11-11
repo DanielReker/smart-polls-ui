@@ -7,7 +7,7 @@
 
 export interface ChoiceDto {
   /** @nullable */
-  id?: number | null;
+  id?: string | null;
   name: string;
   /** @minimum 0 */
   position: number;

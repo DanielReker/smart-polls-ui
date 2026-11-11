@@ -11,7 +11,7 @@ export interface PollResponse {
   createdDate: string;
   /** @nullable */
   description?: string | null;
-  id: number;
+  id: string;
   mySubmissionsCount: number;
   /**
      * @minLength 0

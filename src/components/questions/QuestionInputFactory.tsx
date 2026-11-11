@@ -22,6 +22,10 @@ interface InputFactoryProps {
 export const QuestionInputFactory = ({question, control}: InputFactoryProps) => {
     const {dtype, id, name, isRequired} = question;
 
+    if (!id) {
+        throw new Error("Question ID can't be null");
+    }
+
     const rules = {
         required: isRequired ? 'Это поле обязательно' : false
     };
@@ -35,7 +39,7 @@ export const QuestionInputFactory = ({question, control}: InputFactoryProps) => 
 
                 {dtype === 'text' && (
                     <Controller
-                        name={String(id)}
+                        name={id}
                         control={control}
                         rules={{
                             ...rules,
@@ -60,7 +64,7 @@ export const QuestionInputFactory = ({question, control}: InputFactoryProps) => 
 
                 {dtype === 'single-choice' && (
                     <Controller
-                        name={String(id)}
+                        name={id}
                         control={control}
                         rules={rules}
                         render={({field, fieldState}) => (
@@ -88,7 +92,7 @@ export const QuestionInputFactory = ({question, control}: InputFactoryProps) => 
 
                 {dtype === 'multi-choice' && (
                     <Controller
-                        name={String(id)}
+                        name={id}
                         control={control}
                         rules={{
                             validate: (value) => {
@@ -100,9 +104,9 @@ export const QuestionInputFactory = ({question, control}: InputFactoryProps) => 
                         }}
                         defaultValue={[]}
                         render={({field: {value, onChange}, fieldState}) => {
-                            const selectedIds = (value as number[]) || [];
+                            const selectedIds = (value as string[]) || [];
 
-                            const handleToggle = (optionId: number) => {
+                            const handleToggle = (optionId: string) => {
                                 if (selectedIds.includes(optionId)) {
                                     onChange(selectedIds.filter(id => id !== optionId));
                                 } else {

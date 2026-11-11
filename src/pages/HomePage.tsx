@@ -23,7 +23,7 @@ export const HomePage = () => {
                             <ListItem divider>
                                 <ListItemText
                                     primary={<Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                                        {`${poll.name || 'Poll'} #${poll.id}`}
+                                        {`${poll.name || 'Poll'}`}
                                         <PollStatus status={poll.status}/>
                                     </Box>}
                                     secondary={poll?.description}

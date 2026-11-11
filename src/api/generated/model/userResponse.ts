@@ -7,7 +7,7 @@
 import type { UserResponseRolesItem } from './userResponseRolesItem';
 
 export interface UserResponse {
-  id: number;
+  id: string;
   isRegistered: boolean;
   /** @nullable */
   login?: string | null;

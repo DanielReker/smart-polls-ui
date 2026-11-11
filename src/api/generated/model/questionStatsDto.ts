@@ -8,5 +8,5 @@
 export interface QuestionStatsDto {
   answerCount: number;
   dtype: string;
-  questionId: number;
+  questionId: string;
 }

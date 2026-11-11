@@ -10,7 +10,7 @@ export interface ShortPollResponse {
   createdDate: string;
   /** @nullable */
   description?: string | null;
-  id: number;
+  id: string;
   /**
      * @minLength 0
      * @maxLength 255

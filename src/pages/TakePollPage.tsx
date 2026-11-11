@@ -11,12 +11,16 @@ import {useAuth} from "../auth/AuthContext.tsx";
 
 
 export type SubmissionFormValues = {
-    [questionId: string]: string | number[];
+    [questionId: string]: string | string[];
 };
 
 export const TakePollPage = () => {
-    const { pollId } = useParams();
-    const id = Number(pollId);
+    const { pollId: id } = useParams<{ pollId: string }>();
+
+    if (!id) {
+        throw new Error("Missing pollId param");
+    }
+
     const [isSuccess, setIsSuccess] = useState(false);
 
     const navigate = useNavigate();
@@ -40,7 +44,7 @@ export const TakePollPage = () => {
                 throw new Error("Question ID can't be null")
             }
 
-            const value = data[String(question.id)];
+            const value = data[question.id];
 
             if (value === undefined || value === '' || (Array.isArray(value) && value.length === 0)) {
                 return;
@@ -56,13 +60,13 @@ export const TakePollPage = () => {
                 request.answers.push({
                     dtype: 'single-choice',
                     questionId: question.id,
-                    selectedChoiceId: Number(value as string)
+                    selectedChoiceId: value as string
                 });
             } else if (question.dtype === 'multi-choice') {
                 request.answers.push({
                     dtype: 'multi-choice',
                     questionId: question.id,
-                    selectedChoiceIds: value as number[]
+                    selectedChoiceIds: value as string[]
                 });
             }
         });

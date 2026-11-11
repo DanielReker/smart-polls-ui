@@ -26,25 +26,63 @@ import {
     useStartPoll,
     useUpsertQuestions
 } from "../api/generated";
-import {type PollQuestionsUpsertRequest, type PollResponse, PollResponseStatus} from "../api/generated/model";
+import {
+    type MultiChoiceQuestionDto,
+    type PollQuestionsUpsertRequest,
+    type PollResponse,
+    PollResponseStatus,
+    type QuestionDtoVariant, type SingleChoiceQuestionDto, type TextQuestionDto
+} from "../api/generated/model";
 import {QuestionCard} from "../components/questions/QuestionCard.tsx";
 import PollStatus from "../components/PollStatus.tsx";
 import {PollNavigation} from "../components/PollNavigation.tsx";
 
-const prepareQuestionsForSave = (formData: PollQuestionsUpsertRequest) => {
-    return formData.questions.map((q: any, index) => ({
-        ...q,
+
+function prepareChoiceQuestionForSave(
+    question: SingleChoiceQuestionDto | MultiChoiceQuestionDto,
+    index: number
+): SingleChoiceQuestionDto | MultiChoiceQuestionDto {
+    return {
+        ...question,
         id: null,
         position: index,
-        possibleChoices: q.possibleChoices?.map((c: any, cIndex: number) => ({
-            ...c,
-            id: null,
-            position: cIndex
-        }))
-    }));
+        possibleChoices: question
+            .possibleChoices
+            ?.map((choice, choiceIndex: number) => ({
+                ...choice,
+                id: null,
+                position: choiceIndex
+            }))
+    }
+}
+
+function prepareTextQuestionForSave(
+    question: TextQuestionDto,
+    index: number
+): TextQuestionDto {
+    return {
+        ...question,
+        id: null,
+        position: index
+    }
+}
+
+const prepareQuestionsForSave = (formData: PollQuestionsUpsertRequest): QuestionDtoVariant[] => {
+    return formData
+        .questions
+        .map((question, index) => {
+            if (question.dtype === "text") {
+                return prepareTextQuestionForSave(question, index);
+            } else if (question.dtype === "single-choice"
+                || question.dtype === "multi-choice") {
+                return prepareChoiceQuestionForSave(question, index);
+            } else {
+                throw new Error("Unexpected question type");
+            }
+        });
 };
 
-const prepareQuestionsForForm = (questions: any[]) => {
+const prepareQuestionsForForm = (questions: QuestionDtoVariant[]) => {
     const sortedQuestions = [...questions].sort((a, b) => a.position - b.position);
     return sortedQuestions.map(q => {
         if ('possibleChoices' in q && q.possibleChoices) {
@@ -58,8 +96,12 @@ const prepareQuestionsForForm = (questions: any[]) => {
 };
 
 export const EditPollPage = () => {
-    const { pollId } = useParams();
-    const id = Number(pollId);
+    const { pollId: id } = useParams<{ pollId: string }>();
+
+    if (!id) {
+        throw new Error("Missing pollId param");
+    }
+
     const queryClient = useQueryClient();
     const navigate = useNavigate();
 
@@ -247,7 +289,7 @@ export const EditPollPage = () => {
                                 onClick={() => append({
                                     dtype: 'text', name: '', isRequired: true, position: 0,
                                     maxLength: 1000
-                                } as any)}
+                                })}
                             >
                                 Текст
                             </Button>
@@ -259,7 +301,7 @@ export const EditPollPage = () => {
                                 onClick={() => append({
                                     dtype: 'single-choice', name: '', isRequired: true, position: 0,
                                     possibleChoices: []
-                                } as any)}
+                                })}
                             >
                                 Одиночный выбор
                             </Button>
@@ -271,7 +313,7 @@ export const EditPollPage = () => {
                                 onClick={() => append({
                                     dtype: 'multi-choice', name: '', isRequired: true, position: 0,
                                     possibleChoices: []
-                                } as any)}
+                                })}
                             >
                                 Множественный выбор
                             </Button>

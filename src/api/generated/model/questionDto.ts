@@ -10,7 +10,7 @@ export interface QuestionDto {
   description?: string | null;
   dtype: string;
   /** @nullable */
-  id?: number | null;
+  id?: string | null;
   isRequired: boolean;
   /**
      * @minLength 0

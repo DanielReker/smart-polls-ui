@@ -9,6 +9,6 @@ import type { AnswerDtoVariant } from './answerDtoVariant';
 export interface SubmissionResponse {
   answers: AnswerDtoVariant[];
   createdDate: string;
-  id: number;
-  pollId: number;
+  id: string;
+  pollId: string;
 }

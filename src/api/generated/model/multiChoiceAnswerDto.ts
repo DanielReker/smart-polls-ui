@@ -9,5 +9,5 @@ import type { MultiChoiceAnswerDtoDtype } from './multiChoiceAnswerDtoDtype';
 
 export type MultiChoiceAnswerDto = Omit<AnswerDto, 'dtype'> & {
   dtype: MultiChoiceAnswerDtoDtype;
-  selectedChoiceIds: number[];
+  selectedChoiceIds: string[];
 };

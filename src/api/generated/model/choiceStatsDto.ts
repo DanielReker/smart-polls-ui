@@ -9,5 +9,5 @@ export interface ChoiceStatsDto {
   /** @minimum 0 */
   count: number;
   /** @nullable */
-  id?: number | null;
+  id?: string | null;
 }

@@ -84,8 +84,8 @@ paths:
           name: pollId
           required: true
           schema:
-            type: integer
-            format: int64
+            type: string
+            format: uuid
       responses:
         "200":
           content:
@@ -123,8 +123,8 @@ paths:
           name: pollId
           required: true
           schema:
-            type: integer
-            format: int64
+            type: string
+            format: uuid
       requestBody:
         content:
           application/json:
@@ -168,8 +168,8 @@ paths:
           name: pollId
           required: true
           schema:
-            type: integer
-            format: int64
+            type: string
+            format: uuid
       requestBody:
         content:
           application/json:
@@ -213,8 +213,8 @@ paths:
           name: pollId
           required: true
           schema:
-            type: integer
-            format: int64
+            type: string
+            format: uuid
       responses:
         "200":
           content:
@@ -252,8 +252,8 @@ paths:
           name: pollId
           required: true
           schema:
-            type: integer
-            format: int64
+            type: string
+            format: uuid
       responses:
         "200":
           content:
@@ -291,8 +291,8 @@ paths:
           name: pollId
           required: true
           schema:
-            type: integer
-            format: int64
+            type: string
+            format: uuid
       responses:
         "200":
           content:
@@ -330,8 +330,8 @@ paths:
           name: pollId
           required: true
           schema:
-            type: integer
-            format: int64
+            type: string
+            format: uuid
       requestBody:
         content:
           application/json:
@@ -583,12 +583,12 @@ components:
           type: string
         id:
           type:
-            - integer
+            - string
             - "null"
-          format: int64
+          format: uuid
         questionId:
-          type: integer
-          format: int64
+          type: string
+          format: uuid
       required:
         - dtype
         - questionId
@@ -620,9 +620,9 @@ components:
       properties:
         id:
           type:
-            - integer
+            - string
             - "null"
-          format: int64
+          format: uuid
         name:
           type: string
         position:
@@ -641,9 +641,9 @@ components:
           minimum: 0
         id:
           type:
-            - integer
+            - string
             - "null"
-          format: int64
+          format: uuid
       required:
         - count
     ErrorDto:
@@ -666,8 +666,8 @@ components:
             selectedChoiceIds:
               type: array
               items:
-                type: integer
-                format: int64
+                type: string
+                format: uuid
       required:
         - questionId
         - selectedChoiceIds
@@ -731,8 +731,8 @@ components:
             - string
             - "null"
         id:
-          type: integer
-          format: int64
+          type: string
+          format: uuid
         mySubmissionsCount:
           type: integer
           format: int64
@@ -783,9 +783,9 @@ components:
           type: string
         id:
           type:
-            - integer
+            - string
             - "null"
-          format: int64
+          format: uuid
         isRequired:
           type: boolean
         name:
@@ -821,8 +821,8 @@ components:
         dtype:
           type: string
         questionId:
-          type: integer
-          format: int64
+          type: string
+          format: uuid
       required:
         - answerCount
         - dtype
@@ -850,8 +850,8 @@ components:
             - string
             - "null"
         id:
-          type: integer
-          format: int64
+          type: string
+          format: uuid
         name:
           type: string
           maxLength: 255
@@ -873,8 +873,8 @@ components:
         - type: object
           properties:
             selectedChoiceId:
-              type: integer
-              format: int64
+              type: string
+              format: uuid
       required:
         - questionId
         - selectedChoiceId
@@ -938,11 +938,11 @@ components:
           type: string
           format: date-time
         id:
-          type: integer
-          format: int64
+          type: string
+          format: uuid
         pollId:
-          type: integer
-          format: int64
+          type: string
+          format: uuid
       required:
         - answers
         - createdDate
@@ -982,8 +982,8 @@ components:
       type: object
       properties:
         id:
-          type: integer
-          format: int64
+          type: string
+          format: uuid
         isRegistered:
           type: boolean
         login:

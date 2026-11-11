@@ -9,8 +9,11 @@ import {PollResponseStatus} from "../api/generated/model";
 
 
 export const StatsPage = () => {
-    const { pollId } = useParams();
-    const id = Number(pollId);
+    const { pollId: id } = useParams<{ pollId: string }>();
+
+    if (!id) {
+        throw new Error("Missing pollId param");
+    }
 
     const { data: statsData, isLoading, isError } = useGetStats(id, {
         query: {
@@ -21,8 +24,12 @@ export const StatsPage = () => {
 
     const { data: pollData } = useGetPoll(id);
 
-    const getQuestionTitle = (qId: number) => {
-        return pollData?.questions?.find((q) => q.id === qId)?.name || `Вопрос №${qId}`;
+    const getQuestionTitle = (qId: string) => {
+        return pollData
+            ?.questions
+            ?.find(q => q.id === qId)
+            ?.name
+            || `Вопрос №${qId}`;
     };
 
     if (isLoading && !statsData) {
