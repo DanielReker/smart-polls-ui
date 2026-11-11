@@ -10,5 +10,5 @@ export interface SubmissionResponse {
   answers: AnswerDtoVariant[];
   createdDate: string;
   id: string;
-  pollId: string;
+  quizId: string;
 }

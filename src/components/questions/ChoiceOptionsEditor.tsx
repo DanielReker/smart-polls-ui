@@ -4,11 +4,11 @@ import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import type {PollQuestionsUpsertRequest} from "../../api/generated/model";
+import type {QuizQuestionsUpsertRequest} from "../../api/generated/model";
 
 interface OptionsEditorProps {
     nestIndex: number;
-    control: Control<PollQuestionsUpsertRequest>;
+    control: Control<QuizQuestionsUpsertRequest>;
 }
 
 export const ChoiceOptionsEditor = ({nestIndex, control}: OptionsEditorProps) => {

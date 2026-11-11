@@ -15,12 +15,12 @@ import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {type Control, Controller} from "react-hook-form";
 import {ChoiceOptionsEditor} from "./ChoiceOptionsEditor.tsx";
-import type {PollQuestionsUpsertRequest, QuestionDtoVariant} from "../../api/generated/model";
+import type {QuizQuestionsUpsertRequest, QuestionDtoVariant} from "../../api/generated/model";
 
 interface QuestionCardProps {
     index: number;
     field: QuestionDtoVariant;
-    control: Control<PollQuestionsUpsertRequest>;
+    control: Control<QuizQuestionsUpsertRequest>;
     remove: (index: number) => void;
     move: (from: number, to: number) => void;
     isFirst: boolean;

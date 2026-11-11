@@ -21,7 +21,7 @@ export const MainLayout = () => {
                 <Toolbar>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         <Link to="/" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>
-                            Smart Polls
+                            Smart Quizzes
                         </Link>
                     </Typography>
 

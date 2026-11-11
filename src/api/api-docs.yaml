@@ -6,21 +6,21 @@ servers:
   - description: Generated server url
     url: http://localhost:8080
 paths:
-  /polls:
+  /quizzes:
     post:
-      operationId: createPoll
+      operationId: createQuiz
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/PollCreateRequest"
+              $ref: "#/components/schemas/QuizCreateRequest"
         required: true
       responses:
         "200":
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/PollResponse"
+                $ref: "#/components/schemas/QuizResponse"
           description: OK
         "401":
           content:
@@ -43,16 +43,16 @@ paths:
       security:
         - bearer-key: []
       tags:
-        - poll-controller
-  /polls/my:
+        - quiz-controller
+  /quizzes/my:
     get:
-      operationId: getMyPolls
+      operationId: getMyQuizzes
       responses:
         "200":
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/PollsResponse"
+                $ref: "#/components/schemas/QuizzesResponse"
           description: OK
         "401":
           content:
@@ -75,13 +75,13 @@ paths:
       security:
         - bearer-key: []
       tags:
-        - poll-controller
-  /polls/{pollId}:
+        - quiz-controller
+  /quizzes/{quizId}:
     get:
-      operationId: getPoll
+      operationId: getQuiz
       parameters:
         - in: path
-          name: pollId
+          name: quizId
           required: true
           schema:
             type: string
@@ -91,7 +91,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/PollResponse"
+                $ref: "#/components/schemas/QuizResponse"
           description: OK
         "401":
           content:
@@ -114,13 +114,13 @@ paths:
       security:
         - bearer-key: []
       tags:
-        - poll-controller
-  /polls/{pollId}/questions:
+        - quiz-controller
+  /quizzes/{quizId}/questions:
     put:
       operationId: upsertQuestions
       parameters:
         - in: path
-          name: pollId
+          name: quizId
           required: true
           schema:
             type: string
@@ -129,14 +129,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/PollQuestionsUpsertRequest"
+              $ref: "#/components/schemas/QuizQuestionsUpsertRequest"
         required: true
       responses:
         "200":
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/PollResponse"
+                $ref: "#/components/schemas/QuizResponse"
           description: OK
         "401":
           content:
@@ -159,13 +159,13 @@ paths:
       security:
         - bearer-key: []
       tags:
-        - poll-controller
-  /polls/{pollId}/questions:ai-generate:
+        - quiz-controller
+  /quizzes/{quizId}/questions:ai-generate:
     post:
       operationId: aiGenerateQuestions
       parameters:
         - in: path
-          name: pollId
+          name: quizId
           required: true
           schema:
             type: string
@@ -181,7 +181,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/PollResponse"
+                $ref: "#/components/schemas/QuizResponse"
           description: OK
         "401":
           content:
@@ -204,13 +204,13 @@ paths:
       security:
         - bearer-key: []
       tags:
-        - poll-controller
-  /polls/{pollId}/requests/finish:
+        - quiz-controller
+  /quizzes/{quizId}/requests/finish:
     post:
-      operationId: finishPoll
+      operationId: finishQuiz
       parameters:
         - in: path
-          name: pollId
+          name: quizId
           required: true
           schema:
             type: string
@@ -220,7 +220,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/PollResponse"
+                $ref: "#/components/schemas/QuizResponse"
           description: OK
         "401":
           content:
@@ -243,13 +243,13 @@ paths:
       security:
         - bearer-key: []
       tags:
-        - poll-controller
-  /polls/{pollId}/requests/start:
+        - quiz-controller
+  /quizzes/{quizId}/requests/start:
     post:
-      operationId: startPoll
+      operationId: startQuiz
       parameters:
         - in: path
-          name: pollId
+          name: quizId
           required: true
           schema:
             type: string
@@ -259,7 +259,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/PollResponse"
+                $ref: "#/components/schemas/QuizResponse"
           description: OK
         "401":
           content:
@@ -282,13 +282,13 @@ paths:
       security:
         - bearer-key: []
       tags:
-        - poll-controller
-  /polls/{pollId}/stats:
+        - quiz-controller
+  /quizzes/{quizId}/stats:
     get:
       operationId: getStats
       parameters:
         - in: path
-          name: pollId
+          name: quizId
           required: true
           schema:
             type: string
@@ -321,13 +321,13 @@ paths:
       security:
         - bearer-key: []
       tags:
-        - poll-controller
-  /polls/{pollId}/submissions:
+        - quiz-controller
+  /quizzes/{quizId}/submissions:
     post:
       operationId: createSubmission
       parameters:
         - in: path
-          name: pollId
+          name: quizId
           required: true
           schema:
             type: string
@@ -366,7 +366,7 @@ paths:
       security:
         - bearer-key: []
       tags:
-        - poll-controller
+        - quiz-controller
   /users:
     post:
       operationId: createUser
@@ -698,74 +698,6 @@ components:
         - answerCount
         - choiceStats
         - questionId
-    PollCreateRequest:
-      type: object
-      properties:
-        description:
-          type:
-            - string
-            - "null"
-        name:
-          type: string
-          maxLength: 255
-          minLength: 0
-      required:
-        - name
-    PollQuestionsUpsertRequest:
-      type: object
-      properties:
-        questions:
-          type: array
-          items:
-            $ref: "#/components/schemas/QuestionDtoVariant"
-      required:
-        - questions
-    PollResponse:
-      type: object
-      properties:
-        createdDate:
-          type: string
-          format: date-time
-        description:
-          type:
-            - string
-            - "null"
-        id:
-          type: string
-          format: uuid
-        mySubmissionsCount:
-          type: integer
-          format: int64
-        name:
-          type: string
-          maxLength: 255
-          minLength: 0
-        questions:
-          type: array
-          items:
-            $ref: "#/components/schemas/QuestionDtoVariant"
-        status:
-          type: string
-          enum:
-            - DRAFT
-            - ACTIVE
-            - FINISHED
-      required:
-        - createdDate
-        - id
-        - mySubmissionsCount
-        - name
-        - questions
-        - status
-    PollsResponse:
-      type: object
-      properties:
-        polls:
-          type: array
-          items:
-            $ref: "#/components/schemas/ShortPollResponse"
-      required:
-        - polls
     QuestionDto:
       type: object
       discriminator:
@@ -832,6 +764,74 @@ components:
         - $ref: "#/components/schemas/MultiChoiceQuestionStatsDto"
         - $ref: "#/components/schemas/SingleChoiceQuestionStatsDto"
         - $ref: "#/components/schemas/TextQuestionStatsDto"
+    QuizCreateRequest:
+      type: object
+      properties:
+        description:
+          type:
+            - string
+            - "null"
+        name:
+          type: string
+          maxLength: 255
+          minLength: 0
+      required:
+        - name
+    QuizQuestionsUpsertRequest:
+      type: object
+      properties:
+        questions:
+          type: array
+          items:
+            $ref: "#/components/schemas/QuestionDtoVariant"
+      required:
+        - questions
+    QuizResponse:
+      type: object
+      properties:
+        createdDate:
+          type: string
+          format: date-time
+        description:
+          type:
+            - string
+            - "null"
+        id:
+          type: string
+          format: uuid
+        mySubmissionsCount:
+          type: integer
+          format: int64
+        name:
+          type: string
+          maxLength: 255
+          minLength: 0
+        questions:
+          type: array
+          items:
+            $ref: "#/components/schemas/QuestionDtoVariant"
+        status:
+          type: string
+          enum:
+            - DRAFT
+            - ACTIVE
+            - FINISHED
+      required:
+        - createdDate
+        - id
+        - mySubmissionsCount
+        - name
+        - questions
+        - status
+    QuizzesResponse:
+      type: object
+      properties:
+        quizzes:
+          type: array
+          items:
+            $ref: "#/components/schemas/ShortQuizResponse"
+      required:
+        - quizzes
     SessionResponse:
       type: object
       properties:
@@ -839,7 +839,7 @@ components:
           type: string
       required:
         - token
-    ShortPollResponse:
+    ShortQuizResponse:
       type: object
       properties:
         createdDate:
@@ -940,14 +940,14 @@ components:
         id:
           type: string
           format: uuid
-        pollId:
+        quizId:
           type: string
           format: uuid
       required:
         - answers
         - createdDate
         - id
-        - pollId
+        - quizId
     TextAnswerDto:
       allOf:
         - $ref: "#/components/schemas/AnswerDto"

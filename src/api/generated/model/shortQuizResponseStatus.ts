@@ -5,10 +5,10 @@
  * OpenAPI spec version: v0
  */
 
-export type ShortPollResponseStatus = typeof ShortPollResponseStatus[keyof typeof ShortPollResponseStatus];
+export type ShortQuizResponseStatus = typeof ShortQuizResponseStatus[keyof typeof ShortQuizResponseStatus];
 
 
-export const ShortPollResponseStatus = {
+export const ShortQuizResponseStatus = {
   DRAFT: 'DRAFT',
   ACTIVE: 'ACTIVE',
   FINISHED: 'FINISHED',

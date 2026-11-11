@@ -1,18 +1,18 @@
 import {Box, Button, Chip, Container, Grid, Skeleton, Stack, Typography} from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import PersonIcon from '@mui/icons-material/Person';
-import {useGetPoll, useGetStats} from "../api/generated";
+import {useGetQuiz, useGetStats} from "../api/generated";
 import {Link, useParams} from "react-router";
 import {TextStats} from "../components/stats/TextStats.tsx";
 import {ChoiceStats} from "../components/stats/ChoiceStats.tsx";
-import {PollResponseStatus} from "../api/generated/model";
+import {QuizResponseStatus} from "../api/generated/model";
 
 
 export const StatsPage = () => {
-    const { pollId: id } = useParams<{ pollId: string }>();
+    const { quizId: id } = useParams<{ quizId: string }>();
 
     if (!id) {
-        throw new Error("Missing pollId param");
+        throw new Error("Missing quizId param");
     }
 
     const { data: statsData, isLoading, isError } = useGetStats(id, {
@@ -22,10 +22,10 @@ export const StatsPage = () => {
         }
     });
 
-    const { data: pollData } = useGetPoll(id);
+    const { data: quizData } = useGetQuiz(id);
 
     const getQuestionTitle = (qId: string) => {
-        return pollData
+        return quizData
             ?.questions
             ?.find(q => q.id === qId)
             ?.name
@@ -60,7 +60,7 @@ export const StatsPage = () => {
                         Домашняя страница
                     </Button>
                     <Typography variant="h4" fontWeight="bold">
-                        {pollData?.name || 'Результаты опроса'}
+                        {quizData?.name || 'Результаты теста'}
                     </Typography>
                     <Stack direction="row" spacing={2} alignItems="center" mt={1}>
                         <Chip
@@ -69,8 +69,8 @@ export const StatsPage = () => {
                             sx={{ bgcolor: 'rgba(255,255,255,0.2)', color: 'white', '& .MuiChip-icon': { color: 'white' } }}
                         />
                         <Chip
-                            label={getStatusName(pollData?.status || PollResponseStatus.DRAFT)}
-                            color={pollData?.status === 'ACTIVE' ? 'success' : 'default'}
+                            label={getStatusName(quizData?.status || QuizResponseStatus.DRAFT)}
+                            color={quizData?.status === 'ACTIVE' ? 'success' : 'default'}
                             size="small"
                         />
                     </Stack>
@@ -82,7 +82,7 @@ export const StatsPage = () => {
                     {statsData.stats.map((statItem) => {
                         const title = getQuestionTitle(statItem.questionId);
 
-                        const questionData = (pollData
+                        const questionData = (quizData
                                 ?.questions
                                 ?.find(question =>
                                     question.id == statItem.questionId));
@@ -116,7 +116,7 @@ export const StatsPage = () => {
     );
 };
 
-function getStatusName(status: PollResponseStatus): string {
+function getStatusName(status: QuizResponseStatus): string {
     switch (status) {
         case "DRAFT": return "ЧЕРНОВИК";
         case "ACTIVE": return "АКТИВЕН";

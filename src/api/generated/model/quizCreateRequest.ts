@@ -5,7 +5,7 @@
  * OpenAPI spec version: v0
  */
 
-export interface PollCreateRequest {
+export interface QuizCreateRequest {
   /** @nullable */
   description?: string | null;
   /**

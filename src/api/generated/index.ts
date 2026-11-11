@@ -1,2 +1,2 @@
-export * from './poll-controller/poll-controller';
+export * from './quiz-controller/quiz-controller';
 export * from './user-controller/user-controller';

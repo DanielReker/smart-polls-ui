@@ -6,6 +6,6 @@
  */
 import type { QuestionDtoVariant } from './questionDtoVariant';
 
-export interface PollQuestionsUpsertRequest {
+export interface QuizQuestionsUpsertRequest {
   questions: QuestionDtoVariant[];
 }

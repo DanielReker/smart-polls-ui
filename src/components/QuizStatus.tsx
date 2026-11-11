@@ -1,11 +1,11 @@
 import {Box} from "@mui/material";
-import type {PollResponseStatus} from "../api/generated/model";
+import type {QuizResponseStatus} from "../api/generated/model";
 
-interface PollStatusProps {
-    status: PollResponseStatus;
+interface QuizStatusProps {
+    status: QuizResponseStatus;
 }
 
-const PollStatus = (props: PollStatusProps) => {
+const QuizStatus = (props: QuizStatusProps) => {
     return (
         <Box
             sx={{
@@ -18,7 +18,7 @@ const PollStatus = (props: PollStatusProps) => {
     );
 };
 
-function getStatusName(status: PollResponseStatus): string {
+function getStatusName(status: QuizResponseStatus): string {
     switch (status) {
         case "DRAFT": return "ЧЕРНОВИК";
         case "ACTIVE": return "АКТИВЕН";
@@ -26,4 +26,4 @@ function getStatusName(status: PollResponseStatus): string {
     }
 }
 
-export default PollStatus;
+export default QuizStatus;

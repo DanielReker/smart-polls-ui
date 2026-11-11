@@ -11,7 +11,7 @@ import {AuthContext} from "./AuthContext.tsx";
 import {useQueryClient} from "@tanstack/react-query";
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-    const [token, setToken] = useState<string | null>(localStorage.getItem('poll_token'));
+    const [token, setToken] = useState<string | null>(localStorage.getItem('quiz_token'));
 
     const queryClient = useQueryClient();
 
@@ -32,7 +32,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                     const response = await createUser();
                     const newToken = response.token;
 
-                    localStorage.setItem('poll_token', newToken);
+                    localStorage.setItem('quiz_token', newToken);
                     setToken(newToken);
                 } catch (error) {
                     console.error('Failed to init anonymous session', error);
@@ -45,7 +45,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const logout = async () => {
         await logoutCurrentSession();
-        localStorage.removeItem('poll_token');
+        localStorage.removeItem('quiz_token');
         setToken(null);
         await queryClient.invalidateQueries({ queryKey: getGetUserMeQueryKey() });
     };
@@ -54,7 +54,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         try {
             const response = await loginRaw({ userLogin: login, data: { password } });
             const newToken = response.token;
-            localStorage.setItem('poll_token', newToken);
+            localStorage.setItem('quiz_token', newToken);
             setToken(newToken);
             await queryClient.invalidateQueries({ queryKey: getGetUserMeQueryKey() });
         } catch (e) {

@@ -19,23 +19,23 @@ import {useNavigate, useParams} from "react-router";
 import {useQueryClient} from "@tanstack/react-query";
 
 import {
-    getGetPollQueryKey,
+    getGetQuizQueryKey,
     useAiGenerateQuestions,
-    useFinishPoll,
-    useGetPoll,
-    useStartPoll,
+    useFinishQuiz,
+    useGetQuiz,
+    useStartQuiz,
     useUpsertQuestions
 } from "../api/generated";
 import {
     type MultiChoiceQuestionDto,
-    type PollQuestionsUpsertRequest,
-    type PollResponse,
-    PollResponseStatus,
+    type QuizQuestionsUpsertRequest,
+    type QuizResponse,
+    QuizResponseStatus,
     type QuestionDtoVariant, type SingleChoiceQuestionDto, type TextQuestionDto
 } from "../api/generated/model";
 import {QuestionCard} from "../components/questions/QuestionCard.tsx";
-import PollStatus from "../components/PollStatus.tsx";
-import {PollNavigation} from "../components/PollNavigation.tsx";
+import QuizStatus from "../components/QuizStatus.tsx";
+import {QuizNavigation} from "../components/QuizNavigation.tsx";
 
 
 function prepareChoiceQuestionForSave(
@@ -67,7 +67,7 @@ function prepareTextQuestionForSave(
     }
 }
 
-const prepareQuestionsForSave = (formData: PollQuestionsUpsertRequest): QuestionDtoVariant[] => {
+const prepareQuestionsForSave = (formData: QuizQuestionsUpsertRequest): QuestionDtoVariant[] => {
     return formData
         .questions
         .map((question, index) => {
@@ -95,11 +95,11 @@ const prepareQuestionsForForm = (questions: QuestionDtoVariant[]) => {
     });
 };
 
-export const EditPollPage = () => {
-    const { pollId: id } = useParams<{ pollId: string }>();
+export const EditQuizPage = () => {
+    const { quizId: id } = useParams<{ quizId: string }>();
 
     if (!id) {
-        throw new Error("Missing pollId param");
+        throw new Error("Missing quizId param");
     }
 
     const queryClient = useQueryClient();
@@ -107,29 +107,29 @@ export const EditPollPage = () => {
 
     const [aiPrompt, setAiPrompt] = useState('');
 
-    const { data: poll, isLoading: isPollLoading } = useGetPoll(id);
+    const { data: quiz, isLoading: isQuizLoading } = useGetQuiz(id);
     const { mutateAsync: saveQuestions, isPending: isSaving } = useUpsertQuestions();
     const { mutateAsync: generateAiQuestions, isPending: isGenerating } = useAiGenerateQuestions();
 
-    const { mutateAsync: startPoll, isPending: isStarting } = useStartPoll({
+    const { mutateAsync: startQuiz, isPending: isStarting } = useStartQuiz({
         mutation: {
-            onSuccess: (updatedPollData) => {
-                queryClient.setQueryData(getGetPollQueryKey(id), updatedPollData);
-                navigate(`/polls/${id}/stats`);
+            onSuccess: (updatedQuizData) => {
+                queryClient.setQueryData(getGetQuizQueryKey(id), updatedQuizData);
+                navigate(`/quizzes/${id}/stats`);
             },
-            onError: () => alert("Не удалось создать опрос")
+            onError: () => alert("Не удалось создать тест")
         }
     });
 
-    const { mutateAsync: finishPoll, isPending: isFinishing } = useFinishPoll({
+    const { mutateAsync: finishQuiz, isPending: isFinishing } = useFinishQuiz({
         mutation: {
-            onSuccess: (updatedPollData) => {
-                queryClient.setQueryData(getGetPollQueryKey(id), updatedPollData);
+            onSuccess: (updatedQuizData) => {
+                queryClient.setQueryData(getGetQuizQueryKey(id), updatedQuizData);
             }
         }
     });
 
-    const { control, handleSubmit, reset } = useForm<PollQuestionsUpsertRequest>({
+    const { control, handleSubmit, reset } = useForm<QuizQuestionsUpsertRequest>({
         defaultValues: { questions: [] }
     });
 
@@ -140,15 +140,15 @@ export const EditPollPage = () => {
     });
 
     useEffect(() => {
-        if (poll?.questions) {
-            reset({ questions: prepareQuestionsForForm(poll.questions) });
+        if (quiz?.questions) {
+            reset({ questions: prepareQuestionsForForm(quiz.questions) });
         }
-    }, [poll, reset]);
+    }, [quiz, reset]);
 
-    const onManualSave = async (data: PollQuestionsUpsertRequest) => {
+    const onManualSave = async (data: QuizQuestionsUpsertRequest) => {
         const questionsToSend = prepareQuestionsForSave(data);
         try {
-            await saveQuestions({ pollId: id, data: { questions: questionsToSend } });
+            await saveQuestions({ quizId: id, data: { questions: questionsToSend } });
             // TODO: Add notification
             // alert('Вопросы успешно сохранены!');
         } catch (e) {
@@ -157,21 +157,21 @@ export const EditPollPage = () => {
         }
     };
 
-    const onAiGenerate = async (data: PollQuestionsUpsertRequest) => {
+    const onAiGenerate = async (data: QuizQuestionsUpsertRequest) => {
         if (!aiPrompt.trim()) return;
 
         const questionsToSend = prepareQuestionsForSave(data);
 
         try {
-            await saveQuestions({ pollId: id, data: { questions: questionsToSend } });
+            await saveQuestions({ quizId: id, data: { questions: questionsToSend } });
 
-            const updatedPoll: PollResponse = await generateAiQuestions({
-                pollId: id,
+            const updatedQuiz: QuizResponse = await generateAiQuestions({
+                quizId: id,
                 data: { prompt: aiPrompt }
             });
 
-            if (updatedPoll.questions) {
-                reset({ questions: prepareQuestionsForForm(updatedPoll.questions) });
+            if (updatedQuiz.questions) {
+                reset({ questions: prepareQuestionsForForm(updatedQuiz.questions) });
                 setAiPrompt('');
             }
         } catch (e) {
@@ -180,44 +180,44 @@ export const EditPollPage = () => {
         }
     };
 
-    if (isPollLoading) {
+    if (isQuizLoading) {
         return <Box display="flex" justifyContent="center" mt={4}><CircularProgress /></Box>;
     }
 
     const isGlobalLoading = isSaving || isGenerating;
-    const isDraft = poll?.status === 'DRAFT';
+    const isDraft = quiz?.status === 'DRAFT';
 
     return (
         <Box maxWidth="md" mx="auto" pb={10}>
             <Box mb={3}>
-                <Typography variant="h4" gutterBottom>{poll?.name}</Typography>
+                <Typography variant="h4" gutterBottom>{quiz?.name}</Typography>
                 <Box display="flex" alignItems="center" gap={2} mb={2}>
-                    <PollStatus status={poll?.status || PollResponseStatus.DRAFT} />
+                    <QuizStatus status={quiz?.status || QuizResponseStatus.DRAFT} />
                     {isDraft && (
                         <Button
                             variant='contained'
                             color="success"
                             endIcon={<PlayCircle />}
                             disabled={isStarting}
-                            onClick={() => startPoll({ pollId: id })}
+                            onClick={() => startQuiz({ quizId: id })}
                         >
-                            {isStarting ? 'Запуск...' : 'Запустить опрос'}
+                            {isStarting ? 'Запуск...' : 'Запустить тест'}
                         </Button>
                     )}
-                    {poll?.status === 'ACTIVE' && (
+                    {quiz?.status === 'ACTIVE' && (
                         <Button
                             variant='contained'
                             color="warning"
                             endIcon={<StopCircle />}
                             disabled={isFinishing}
-                            onClick={() => finishPoll({ pollId: id })}
+                            onClick={() => finishQuiz({ quizId: id })}
                         >
-                            {isFinishing ? 'Завершение...' : 'Завершить опрос'}
+                            {isFinishing ? 'Завершение...' : 'Завершить тест'}
                         </Button>
                     )}
                 </Box>
 
-                <PollNavigation pollId={id} status={poll?.status} />
+                <QuizNavigation quizId={id} status={quiz?.status} />
             </Box>
 
             {isDraft ? (
@@ -230,7 +230,7 @@ export const EditPollPage = () => {
                             </Box>
                             <Typography variant="body2" color="text.secondary" sx={{mb: 2}}>
                                 Введите тему или инструкции (например, "Добавь 3 вопроса про потоки в Java")
-                                и ИИ обновит ваш опрос. Вопросы будут сохранены автоматически.
+                                и ИИ обновит ваш тест. Вопросы будут сохранены автоматически.
                             </Typography>
 
                             <Box display="flex" gap={2} alignItems="flex-start">
@@ -239,7 +239,7 @@ export const EditPollPage = () => {
                                     multiline
                                     minRows={2}
                                     maxRows={6}
-                                    placeholder="Пример: Сгенерируй опрос для сбора фидбека от сотрудников по нашему последнему корпоративу. Он должен содержать около 5 вопросов"
+                                    placeholder="Пример: Сгенерируй тест для сбора фидбека от сотрудников по нашему последнему корпоративу. Он должен содержать около 5 вопросов"
                                     value={aiPrompt}
                                     onChange={(e) => setAiPrompt(e.target.value)}
                                     disabled={isGlobalLoading}
@@ -336,12 +336,12 @@ export const EditPollPage = () => {
             ) : (
                 <Card sx={{ p: 4, textAlign: 'center' }}>
                     <Typography variant="h6" color="text.secondary">
-                        Опрос активен, редактирование недоступно
+                        Тест активен, редактирование недоступно
                     </Typography>
                     <Button
                         variant="contained"
                         sx={{ mt: 2 }}
-                        onClick={() => navigate(`/polls/${id}/stats`)}
+                        onClick={() => navigate(`/quizzes/${id}/stats`)}
                     >
                         Просмотр статистики
                     </Button>

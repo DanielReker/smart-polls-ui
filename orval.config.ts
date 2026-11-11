@@ -1,7 +1,7 @@
 import { defineConfig } from 'orval';
 
 export default defineConfig({
-    'smart-poll-api': {
+    'smart-quiz-api': {
         input: './src/api/api-docs.yaml',
         output: {
             mode: 'tags-split',

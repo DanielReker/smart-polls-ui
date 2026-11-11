@@ -4,20 +4,17 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { PollResponseStatus } from './pollResponseStatus';
-import type { QuestionDtoVariant } from './questionDtoVariant';
+import type { ShortQuizResponseStatus } from './shortQuizResponseStatus';
 
-export interface PollResponse {
+export interface ShortQuizResponse {
   createdDate: string;
   /** @nullable */
   description?: string | null;
   id: string;
-  mySubmissionsCount: number;
   /**
      * @minLength 0
      * @maxLength 255
      */
   name: string;
-  questions: QuestionDtoVariant[];
-  status: PollResponseStatus;
+  status: ShortQuizResponseStatus;
 }

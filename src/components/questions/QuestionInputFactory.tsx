@@ -11,7 +11,7 @@ import {
     TextField,
     Typography
 } from "@mui/material";
-import type {SubmissionFormValues} from "../../pages/TakePollPage.tsx";
+import type {SubmissionFormValues} from "../../pages/TakeQuizPage.tsx";
 import type {QuestionDtoVariant} from "../../api/generated/model";
 
 interface InputFactoryProps {

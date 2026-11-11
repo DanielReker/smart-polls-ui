@@ -5,7 +5,7 @@ export const AXIOS_INSTANCE = axios.create({
 });
 
 AXIOS_INSTANCE.interceptors.request.use((config) => {
-    const token = localStorage.getItem('poll_token');
+    const token = localStorage.getItem('quiz_token');
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     }

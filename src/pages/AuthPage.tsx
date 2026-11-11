@@ -75,7 +75,7 @@ export const AuthPage = () => {
 
                     {mode === 'register' && (
                         <Typography variant="body2" color="text.secondary" align="center">
-                            Зарегистрируйтесь, чтобы сохранить доступ к вашим опросам с любых устройств
+                            Зарегистрируйтесь, чтобы сохранить доступ к вашим тестам с любых устройств
                         </Typography>
                     )}
 
