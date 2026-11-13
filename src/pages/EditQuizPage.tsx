@@ -278,16 +278,6 @@ export const EditQuizPage = () => {
     const onAiGenerate = async (data: QuizQuestionsUpsertRequest) => {
         if (!aiPrompt.trim()) return;
 
-        const validationError = validateQuizQuestions(data.questions);
-        if (validationError) {
-            setNotification({
-                open: true,
-                message: validationError,
-                severity: 'error'
-            });
-            return;
-        }
-
         const questionsToSend = prepareQuestionsForSave(data);
 
         try {
@@ -376,7 +366,7 @@ export const EditQuizPage = () => {
                                     multiline
                                     minRows={2}
                                     maxRows={6}
-                                    placeholder="Пример: Сгенерируй тест для сбора фидбека от сотрудников по нашему последнему корпоративу. Он должен содержать около 5 вопросов"
+                                    placeholder="Пример: Сгенерируй тест на тему Java Stream API. Он должен содержать 5 вопросов, от простых к сложным. Используй вопросы разных типов"
                                     value={aiPrompt}
                                     onChange={(e) => setAiPrompt(e.target.value)}
                                     disabled={isGlobalLoading}
