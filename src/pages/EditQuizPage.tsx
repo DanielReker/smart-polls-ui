@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react';
 import {useFieldArray, useForm} from 'react-hook-form';
 import {
+    Alert,
     Box,
     Button,
     Card,
@@ -8,6 +9,7 @@ import {
     CircularProgress,
     Divider,
     InputAdornment,
+    Snackbar,
     TextField,
     Typography
 } from '@mui/material';
@@ -31,12 +33,13 @@ import {
     type QuizQuestionsUpsertRequest,
     type QuizResponse,
     QuizResponseStatus,
-    type QuestionDtoVariant, type SingleChoiceQuestionDto, type TextQuestionDto
+    type QuestionDtoVariant,
+    type SingleChoiceQuestionDto,
+    type TextQuestionDto
 } from "../api/generated/model";
 import {QuestionCard} from "../components/questions/QuestionCard.tsx";
 import QuizStatus from "../components/QuizStatus.tsx";
 import {QuizNavigation} from "../components/QuizNavigation.tsx";
-
 
 function prepareChoiceQuestionForSave(
     question: SingleChoiceQuestionDto | MultiChoiceQuestionDto,
@@ -46,14 +49,20 @@ function prepareChoiceQuestionForSave(
         ...question,
         id: null,
         position: index,
-        possibleChoices: question
-            .possibleChoices
-            ?.map((choice, choiceIndex: number) => ({
-                ...choice,
-                id: null,
-                position: choiceIndex
-            }))
-    }
+        maxScore: Number(question.maxScore) || 0,
+        hints: (question.hints || []).map((hint, hintIndex: number) => ({
+            id: null,
+            sequentialOrder: hintIndex,
+            scorePenalty: Number(hint.scorePenalty) || 0,
+            text: hint.text.trim()
+        })),
+        possibleChoices: (question.possibleChoices || []).map((choice, choiceIndex: number) => ({
+            id: null,
+            position: choiceIndex,
+            name: choice.name.trim(),
+            isCorrect: Boolean(choice.isCorrect)
+        }))
+    };
 }
 
 function prepareTextQuestionForSave(
@@ -63,37 +72,114 @@ function prepareTextQuestionForSave(
     return {
         ...question,
         id: null,
-        position: index
-    }
+        position: index,
+        maxScore: Number(question.maxScore) || 0,
+        maxLength: question.maxLength ? Number(question.maxLength) : null,
+        sampleCorrectAnswer: question.sampleCorrectAnswer?.trim() || null,
+        hints: (question.hints || []).map((hint, hintIndex: number) => ({
+            id: null,
+            sequentialOrder: hintIndex,
+            scorePenalty: Number(hint.scorePenalty) || 0,
+            text: hint.text.trim()
+        }))
+    };
 }
 
 const prepareQuestionsForSave = (formData: QuizQuestionsUpsertRequest): QuestionDtoVariant[] => {
-    return formData
-        .questions
-        .map((question, index) => {
-            if (question.dtype === "text") {
-                return prepareTextQuestionForSave(question, index);
-            } else if (question.dtype === "single-choice"
-                || question.dtype === "multi-choice") {
-                return prepareChoiceQuestionForSave(question, index);
-            } else {
-                throw new Error("Unexpected question type");
-            }
-        });
+    return formData.questions.map((question, index) => {
+        if (question.dtype === "text") {
+            return prepareTextQuestionForSave(question, index);
+        } else if (question.dtype === "single-choice" || question.dtype === "multi-choice") {
+            return prepareChoiceQuestionForSave(question, index);
+        } else {
+            throw new Error("Unexpected question type");
+        }
+    });
 };
 
-const prepareQuestionsForForm = (questions: QuestionDtoVariant[]) => {
+const prepareQuestionsForForm = (questions: QuestionDtoVariant[]): QuestionDtoVariant[] => {
     const sortedQuestions = [...questions].sort((a, b) => a.position - b.position);
     return sortedQuestions.map(q => {
+        const sortedHints = q.hints ? [...q.hints].sort((a, b) => a.sequentialOrder - b.sequentialOrder) : [];
         if ('possibleChoices' in q && q.possibleChoices) {
             return {
                 ...q,
-                possibleChoices: [...q.possibleChoices].sort((a, b) => a.position - b.position)
+                maxScore: q.maxScore ?? 1,
+                hints: sortedHints,
+                possibleChoices: [...q.possibleChoices]
+                    .sort((a, b) => a.position - b.position)
+                    .map(choice => ({
+                        ...choice,
+                        isCorrect: Boolean(choice.isCorrect)
+                    }))
             };
         }
-        return q;
+        return {
+            ...q,
+            maxScore: q.maxScore ?? 1,
+            hints: sortedHints
+        };
     });
 };
+
+function validateQuizQuestions(questions: QuestionDtoVariant[]): string | null {
+    if (!questions || questions.length === 0) {
+        return "Добавьте хотя бы один вопрос в тест";
+    }
+
+    for (let i = 0; i < questions.length; i++) {
+        const q = questions[i];
+        const qNum = i + 1;
+
+        if (!q.name || !q.name.trim()) {
+            return `Вопрос №${qNum}: заполните текст вопроса`;
+        }
+
+        const maxScore = Number(q.maxScore);
+        if (isNaN(maxScore) || maxScore < 0) {
+            return `Вопрос №${qNum}: максимальный балл вопроса не может быть отрицательным`;
+        }
+
+        const hints = q.hints || [];
+        let totalPenalty = 0;
+        for (let hIdx = 0; hIdx < hints.length; hIdx++) {
+            const hint = hints[hIdx];
+            const hNum = hIdx + 1;
+            if (!hint.text || !hint.text.trim()) {
+                return `Вопрос №${qNum}, подсказка №${hNum}: заполните текст подсказки`;
+            }
+            const penalty = Number(hint.scorePenalty);
+            if (isNaN(penalty) || penalty < 0) {
+                return `Вопрос №${qNum}, подсказка №${hNum}: штраф не может быть отрицательным`;
+            }
+            totalPenalty += penalty;
+        }
+
+        const minPossibleScore = Math.round((maxScore - totalPenalty) * 100) / 100;
+        if (minPossibleScore < 0) {
+            return `Вопрос №${qNum}: минимальный балл вопроса не может быть отрицательным. Сумма штрафов (${totalPenalty}) превышает максимальный балл (${maxScore})`;
+        }
+
+        if (q.dtype === 'single-choice' || q.dtype === 'multi-choice') {
+            const choices = q.possibleChoices || [];
+            if (choices.length === 0) {
+                return `Вопрос №${qNum}: добавьте варианты ответов`;
+            }
+            for (let cIdx = 0; cIdx < choices.length; cIdx++) {
+                if (!choices[cIdx].name || !choices[cIdx].name.trim()) {
+                    return `Вопрос №${qNum}: заполните текст всех вариантов ответа`;
+                }
+            }
+            const correctCount = choices.filter(c => c.isCorrect).length;
+
+            if (q.dtype === 'single-choice' && correctCount !== 1) {
+                return `Вопрос №${qNum}: вопрос с одиночным выбором должен содержать ровно один правильный вариант ответа`;
+            }
+        }
+    }
+
+    return null;
+}
 
 export const EditQuizPage = () => {
     const { quizId: id } = useParams<{ quizId: string }>();
@@ -106,6 +192,15 @@ export const EditQuizPage = () => {
     const navigate = useNavigate();
 
     const [aiPrompt, setAiPrompt] = useState('');
+    const [notification, setNotification] = useState<{
+        open: boolean;
+        message: string;
+        severity: 'success' | 'error';
+    }>({
+        open: false,
+        message: '',
+        severity: 'success'
+    });
 
     const { data: quiz, isLoading: isQuizLoading } = useGetQuiz(id);
     const { mutateAsync: saveQuestions, isPending: isSaving } = useUpsertQuestions();
@@ -117,7 +212,13 @@ export const EditQuizPage = () => {
                 queryClient.setQueryData(getGetQuizQueryKey(id), updatedQuizData);
                 navigate(`/quizzes/${id}/stats`);
             },
-            onError: () => alert("Не удалось создать тест")
+            onError: () => {
+                setNotification({
+                    open: true,
+                    message: "Не удалось запустить тест",
+                    severity: "error"
+                });
+            }
         }
     });
 
@@ -129,7 +230,7 @@ export const EditQuizPage = () => {
         }
     });
 
-    const { control, handleSubmit, reset } = useForm<QuizQuestionsUpsertRequest>({
+    const { control, handleSubmit, reset, setValue } = useForm<QuizQuestionsUpsertRequest>({
         defaultValues: { questions: [] }
     });
 
@@ -146,19 +247,46 @@ export const EditQuizPage = () => {
     }, [quiz, reset]);
 
     const onManualSave = async (data: QuizQuestionsUpsertRequest) => {
+        const validationError = validateQuizQuestions(data.questions);
+        if (validationError) {
+            setNotification({
+                open: true,
+                message: validationError,
+                severity: 'error'
+            });
+            return;
+        }
+
         const questionsToSend = prepareQuestionsForSave(data);
         try {
             await saveQuestions({ quizId: id, data: { questions: questionsToSend } });
-            // TODO: Add notification
-            // alert('Вопросы успешно сохранены!');
+            setNotification({
+                open: true,
+                message: 'Вопросы успешно сохранены',
+                severity: 'success'
+            });
         } catch (e) {
             console.error(e);
-            alert('Ошибка при сохранении вопросов');
+            setNotification({
+                open: true,
+                message: 'Ошибка при сохранении вопросов',
+                severity: 'error'
+            });
         }
     };
 
     const onAiGenerate = async (data: QuizQuestionsUpsertRequest) => {
         if (!aiPrompt.trim()) return;
+
+        const validationError = validateQuizQuestions(data.questions);
+        if (validationError) {
+            setNotification({
+                open: true,
+                message: validationError,
+                severity: 'error'
+            });
+            return;
+        }
 
         const questionsToSend = prepareQuestionsForSave(data);
 
@@ -173,10 +301,19 @@ export const EditQuizPage = () => {
             if (updatedQuiz.questions) {
                 reset({ questions: prepareQuestionsForForm(updatedQuiz.questions) });
                 setAiPrompt('');
+                setNotification({
+                    open: true,
+                    message: 'Вопросы успешно сгенерированы',
+                    severity: 'success'
+                });
             }
         } catch (e) {
             console.error(e);
-            alert('Не удалось сгенерировать вопросы. Пожалуйста, попробуйте позже.');
+            setNotification({
+                open: true,
+                message: 'Не удалось сгенерировать вопросы. Пожалуйста, попробуйте позже.',
+                severity: 'error'
+            });
         }
     };
 
@@ -274,6 +411,7 @@ export const EditQuizPage = () => {
                                 index={index}
                                 field={field}
                                 control={control}
+                                setValue={setValue}
                                 remove={remove}
                                 move={move}
                                 isFirst={index === 0}
@@ -287,8 +425,14 @@ export const EditQuizPage = () => {
                                 startIcon={<AddCircleOutlineIcon />}
                                 disabled={isGlobalLoading}
                                 onClick={() => append({
-                                    dtype: 'text', name: '', isRequired: true, position: 0,
-                                    maxLength: 1000
+                                    dtype: 'text',
+                                    name: '',
+                                    isRequired: true,
+                                    position: fields.length,
+                                    maxScore: 1,
+                                    hints: [],
+                                    maxLength: 1000,
+                                    sampleCorrectAnswer: ''
                                 })}
                             >
                                 Текст
@@ -299,7 +443,12 @@ export const EditQuizPage = () => {
                                 startIcon={<AddCircleOutlineIcon />}
                                 disabled={isGlobalLoading}
                                 onClick={() => append({
-                                    dtype: 'single-choice', name: '', isRequired: true, position: 0,
+                                    dtype: 'single-choice',
+                                    name: '',
+                                    isRequired: true,
+                                    position: fields.length,
+                                    maxScore: 1,
+                                    hints: [],
                                     possibleChoices: []
                                 })}
                             >
@@ -311,7 +460,12 @@ export const EditQuizPage = () => {
                                 startIcon={<AddCircleOutlineIcon />}
                                 disabled={isGlobalLoading}
                                 onClick={() => append({
-                                    dtype: 'multi-choice', name: '', isRequired: true, position: 0,
+                                    dtype: 'multi-choice',
+                                    name: '',
+                                    isRequired: true,
+                                    position: fields.length,
+                                    maxScore: 1,
+                                    hints: [],
                                     possibleChoices: []
                                 })}
                             >
@@ -347,6 +501,22 @@ export const EditQuizPage = () => {
                     </Button>
                 </Card>
             )}
+
+            <Snackbar
+                open={notification.open}
+                autoHideDuration={5000}
+                onClose={() => setNotification(prev => ({ ...prev, open: false }))}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                sx={{ mb: 8 }}
+            >
+                <Alert
+                    onClose={() => setNotification(prev => ({ ...prev, open: false }))}
+                    severity={notification.severity}
+                    sx={{ width: '100%', boxShadow: 3 }}
+                >
+                    {notification.message}
+                </Alert>
+            </Snackbar>
         </Box>
     );
 };

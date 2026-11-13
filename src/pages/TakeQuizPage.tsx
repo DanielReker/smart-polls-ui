@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import {useForm} from 'react-hook-form';
-import {Alert, Box, Button, Card, CircularProgress, Container, Typography} from '@mui/material';
+import {Alert, Box, Button, Card, CircularProgress, Container, Snackbar, Typography} from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import {Link, useNavigate, useParams} from "react-router";
@@ -8,7 +8,6 @@ import {useCreateSubmission, useGetQuiz} from "../api/generated";
 import type {QuestionDtoVariant, SubmissionCreateRequest} from "../api/generated/model";
 import {QuestionInputFactory} from "../components/questions/QuestionInputFactory.tsx";
 import {useAuth} from "../auth/AuthContext.tsx";
-
 
 export type SubmissionFormValues = {
     [questionId: string]: string | string[];
@@ -22,6 +21,15 @@ export const TakeQuizPage = () => {
     }
 
     const [isSuccess, setIsSuccess] = useState(false);
+    const [notification, setNotification] = useState<{
+        open: boolean;
+        message: string;
+        severity: 'success' | 'error';
+    }>({
+        open: false,
+        message: '',
+        severity: 'success'
+    });
 
     const navigate = useNavigate();
 
@@ -76,7 +84,11 @@ export const TakeQuizPage = () => {
             setIsSuccess(true);
         } catch (e) {
             console.error(e);
-            alert('Ошибка при попытке отправить ответы');
+            setNotification({
+                open: true,
+                message: 'Ошибка при попытке отправить ответы',
+                severity: 'error'
+            });
         }
     };
 
@@ -95,7 +107,7 @@ export const TakeQuizPage = () => {
                 Перейти к редактированию
             </Button>
         </Card>
-    )
+    );
     if (quiz.status === 'FINISHED') return (
         <Card sx={{ p: 4, textAlign: 'center' }}>
             <Typography variant="h6" color="text.secondary">
@@ -160,6 +172,21 @@ export const TakeQuizPage = () => {
                     </Button>
                 </Box>
             </form>
+
+            <Snackbar
+                open={notification.open}
+                autoHideDuration={5000}
+                onClose={() => setNotification(prev => ({...prev, open: false}))}
+                anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}
+            >
+                <Alert
+                    onClose={() => setNotification(prev => ({...prev, open: false}))}
+                    severity={notification.severity}
+                    sx={{width: '100%', boxShadow: 3}}
+                >
+                    {notification.message}
+                </Alert>
+            </Snackbar>
         </Container>
     );
 };

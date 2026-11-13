@@ -12,6 +12,7 @@ export * from './changeCredentialsRequest';
 export * from './choiceDto';
 export * from './choiceStatsDto';
 export * from './errorDto';
+export * from './hintDto';
 export * from './loginRequest';
 export * from './multiChoiceAnswerDto';
 export * from './multiChoiceAnswerDtoDtype';

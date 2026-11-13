@@ -11,4 +11,6 @@ export type TextQuestionDto = Omit<QuestionDto, 'dtype'> & ({
   dtype: TextQuestionDtoDtype;
   /** @nullable */
   maxLength?: number | null;
+  /** @nullable */
+  sampleCorrectAnswer?: string | null;
 });

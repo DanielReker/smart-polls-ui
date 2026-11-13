@@ -4,14 +4,18 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
+import type { HintDto } from './hintDto';
 
 export interface QuestionDto {
   /** @nullable */
   description?: string | null;
   dtype: string;
+  hints: HintDto[];
   /** @nullable */
   id?: string | null;
   isRequired: boolean;
+  /** @minimum 0 */
+  maxScore: number;
   /**
      * @minLength 0
      * @maxLength 255

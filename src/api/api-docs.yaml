@@ -623,6 +623,8 @@ components:
             - string
             - "null"
           format: uuid
+        isCorrect:
+          type: boolean
         name:
           type: string
         position:
@@ -630,6 +632,7 @@ components:
           format: int32
           minimum: 0
       required:
+        - isCorrect
         - name
         - position
     ChoiceStatsDto:
@@ -653,6 +656,26 @@ components:
           type: string
       required:
         - message
+    HintDto:
+      type: object
+      properties:
+        id:
+          type:
+            - string
+            - "null"
+          format: uuid
+        scorePenalty:
+          type: number
+          minimum: 0
+        sequentialOrder:
+          type: integer
+          format: int32
+        text:
+          type: string
+      required:
+        - scorePenalty
+        - sequentialOrder
+        - text
     LoginRequest:
       type: object
       properties:
@@ -681,7 +704,9 @@ components:
               items:
                 $ref: "#/components/schemas/ChoiceDto"
       required:
+        - hints
         - isRequired
+        - maxScore
         - name
         - position
         - possibleChoices
@@ -713,6 +738,10 @@ components:
             - "null"
         dtype:
           type: string
+        hints:
+          type: array
+          items:
+            $ref: "#/components/schemas/HintDto"
         id:
           type:
             - string
@@ -720,6 +749,9 @@ components:
           format: uuid
         isRequired:
           type: boolean
+        maxScore:
+          type: number
+          minimum: 0
         name:
           type: string
           maxLength: 255
@@ -730,7 +762,9 @@ components:
           minimum: 0
       required:
         - dtype
+        - hints
         - isRequired
+        - maxScore
         - name
         - position
     QuestionDtoVariant:
@@ -888,7 +922,9 @@ components:
               items:
                 $ref: "#/components/schemas/ChoiceDto"
       required:
+        - hints
         - isRequired
+        - maxScore
         - name
         - position
         - possibleChoices
@@ -968,8 +1004,14 @@ components:
                 - integer
                 - "null"
               format: int32
+            sampleCorrectAnswer:
+              type:
+                - string
+                - "null"
       required:
+        - hints
         - isRequired
+        - maxScore
         - name
         - position
     TextQuestionStatsDto:
